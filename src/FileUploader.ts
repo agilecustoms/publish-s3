@@ -1,3 +1,4 @@
+import * as core from "@actions/core";
 import {S3Client, PutObjectCommand} from "@aws-sdk/client-s3";
 import {FileService} from "FileService";
 
@@ -11,11 +12,11 @@ export class FileUploader {
     }
 
     public async upload(srcDir: string, bucket: string): Promise<void> {
-        console.info(`Uploading ${srcDir} to ${bucket}`);
+        core.info(`Uploading ${srcDir} to ${bucket}`);
 
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
-            console.log(`uploading ${file.name}`);
+            core.debug(`uploading ${file.name}`);
             const output = await this.s3Client.send(new PutObjectCommand({
                 Bucket: bucket,
                 Key: `${file.name}`,
