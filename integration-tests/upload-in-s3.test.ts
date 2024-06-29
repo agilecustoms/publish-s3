@@ -55,7 +55,8 @@ describe("FileUploader", () => {
 
         const output = await s3Client.send(new ListObjectsV2Command({Bucket: BUCKET_NAME}));
         expect(output.$metadata.httpStatusCode).toEqual(200);
-        expect(output.KeyCount).toBeGreaterThan(0);
+        const files = output.Contents!!.map((content) => content.Key).sort();
+        expect(files).toEqual(["index.html", "styles.css"]);
     });
 
     afterAll(async () => {
