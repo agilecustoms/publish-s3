@@ -12,7 +12,7 @@ export class FileUploader {
     }
 
     public async upload(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
-        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir} with tags ${tags}`);
+        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}`: ''}`);
 
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
