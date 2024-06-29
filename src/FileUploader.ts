@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import {S3Client, PutObjectCommand} from "@aws-sdk/client-s3";
+import {S3Client, PutObjectCommand, PutObjectCommandInput} from "@aws-sdk/client-s3";
 import {FileService} from "FileService";
 
 export class FileUploader {
@@ -11,18 +11,22 @@ export class FileUploader {
         this.s3Client = s3Client;
     }
 
-    public async upload(srcDir: string, bucket: string, bucketDir: string): Promise<void> {
-        core.info(`Uploading ${srcDir} to ${bucket}`);
+    public async upload(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
+        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir} with tags ${tags}`);
 
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
             core.debug(`uploading ${file.name}`);
-            const output = await this.s3Client.send(new PutObjectCommand({
+            const input: PutObjectCommandInput = {
                 Bucket: bucket,
                 Key: `${bucketDir}/${file.name}`,
                 Body: this.fileService.readFile(file.fullPath),
                 ContentType: file.contentType
-            }));
+            };
+            if (tags.length > 0) {
+                input.Tagging = tags;
+            }
+            const output = await this.s3Client.send(new PutObjectCommand(input));
             const statusCode = output.$metadata.httpStatusCode;
             if (statusCode !== 200) {
                 throw new Error(`Failed to upload ${file}, status code: ${statusCode}`);

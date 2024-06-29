@@ -30,3 +30,4 @@ jobs:
           source-dir: 'dist'
           bucket: 'agilecustoms-tt-web-dist'
           bucket-dir: '1.1'
+          tags: Release=true&Tag=1.1

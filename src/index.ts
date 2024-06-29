@@ -10,6 +10,7 @@ const sessionToken: string = core.getInput('session-token', {required: true});
 const sourceDir: string = core.getInput('source-dir', {required: true});
 const bucket: string = core.getInput('bucket', {required: true});
 const bucketDir: string = core.getInput('bucket-dir', {required: true});
+const tags = core.getInput('tags', { trimWhitespace: true });
 
 const fileService = new FileService();
 const s3Client = new S3Client({
@@ -21,7 +22,7 @@ const s3Client = new S3Client({
 });
 const fileUploader = new FileUploader(fileService, s3Client);
 
-fileUploader.upload(sourceDir, bucket, bucketDir)
+fileUploader.upload(sourceDir, bucket, bucketDir, tags)
     .then(() => core.info("Upload completed"))
     .catch((error) => {
         core.error("Upload failed")

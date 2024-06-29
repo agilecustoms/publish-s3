@@ -57918,17 +57918,21 @@ class FileUploader {
         this.fileService = fileService;
         this.s3Client = s3Client;
     }
-    async upload(srcDir, bucket, bucketDir) {
-        core.info(`Uploading ${srcDir} to ${bucket}`);
+    async upload(srcDir, bucket, bucketDir, tags = '') {
+        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir} with tags ${tags}`);
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
             core.debug(`uploading ${file.name}`);
-            const output = await this.s3Client.send(new client_s3_1.PutObjectCommand({
+            const input = {
                 Bucket: bucket,
                 Key: `${bucketDir}/${file.name}`,
                 Body: this.fileService.readFile(file.fullPath),
                 ContentType: file.contentType
-            }));
+            };
+            if (tags.length > 0) {
+                input.Tagging = tags;
+            }
+            const output = await this.s3Client.send(new client_s3_1.PutObjectCommand(input));
             const statusCode = output.$metadata.httpStatusCode;
             if (statusCode !== 200) {
                 throw new Error(`Failed to upload ${file}, status code: ${statusCode}`);
@@ -57969,22 +57973,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const FileUploader_1 = __nccwpck_require__(5946);
 const client_s3_1 = __nccwpck_require__(9250);
 const core_1 = __nccwpck_require__(2186);
 const FileService_1 = __nccwpck_require__(9497);
-const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const accessKeyId = core.getInput('access-key-id', { required: true });
 const secretAccessKey = core.getInput('secret-access-key', { required: true });
 const sessionToken = core.getInput('session-token', { required: true });
 const sourceDir = core.getInput('source-dir', { required: true });
 const bucket = core.getInput('bucket', { required: true });
 const bucketDir = core.getInput('bucket-dir', { required: true });
+const tags = core.getInput('tags', { trimWhitespace: true });
 const fileService = new FileService_1.FileService();
 const s3Client = new client_s3_1.S3Client({
     credentials: {
@@ -57994,12 +57995,7 @@ const s3Client = new client_s3_1.S3Client({
     },
 });
 const fileUploader = new FileUploader_1.FileUploader(fileService, s3Client);
-core.info("Find out source dir");
-const dir = process.cwd();
-core.info(process.cwd());
-const files = node_fs_1.default.readdirSync(dir);
-core.info(JSON.stringify(files));
-fileUploader.upload(sourceDir, bucket, bucketDir)
+fileUploader.upload(sourceDir, bucket, bucketDir, tags)
     .then(() => core.info("Upload completed"))
     .catch((error) => {
     core.error("Upload failed");

@@ -20,9 +20,10 @@ inputs:
   bucket-dir:
     required: true
     description: s3 bucket directory
-#  tags:
-#    required: false
-#    description: tags to be added to s3 objects
+  tags:
+    required: false
+    description: tags to be added to s3 objects. Format is key1=value1&key2=value2
+    default: ''
 runs:
   using: 'node20'
   main: 'dist/index.js'
