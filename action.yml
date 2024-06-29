@@ -13,4 +13,4 @@ author: Alexey Chekulaev
 #    description: tags to be added to s3 objects
 runs:
   using: 'node20'
-  main: 'index.js'
+  main: 'dist/index.js'
