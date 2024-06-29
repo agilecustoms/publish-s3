@@ -1,7 +1,7 @@
 import {LocalstackContainer, StartedLocalStackContainer} from "@testcontainers/localstack";
 import {
     CreateBucketCommand,
-    CreateBucketCommandInput, HeadObjectCommand,
+    CreateBucketCommandInput, HeadObjectCommand, HeadObjectCommandOutput,
     ListObjectsV2Command,
     S3Client
 } from "@aws-sdk/client-s3";
@@ -28,6 +28,12 @@ describe("FileUploader", () => {
     let s3Client: S3Client;
     let fileUploader: FileUploader;
 
+    async function headObject(key: string): Promise<HeadObjectCommandOutput> {
+        const output = await s3Client.send(new HeadObjectCommand({Bucket: BUCKET_NAME, Key: key}));
+        expect(output.$metadata.httpStatusCode).toEqual(200);
+        return output;
+    }
+
     beforeAll(async () => {
         container = await new LocalstackContainer().start();
         s3Client = new S3Client({
@@ -50,17 +56,20 @@ describe("FileUploader", () => {
         fileUploader = new FileUploader(fileService, s3Client);
     }, LOCALSTACK_CONTAINER_START_TIMEOUT);
 
-    it('should upload static assets', async () => {
+    it('should upload static assets with valid content types', async () => {
         const srcDir = `${__dirname}/static-assets`;
 
         await fileUploader.upload(srcDir, BUCKET_NAME);
 
         const output = await s3Client.send(new ListObjectsV2Command({Bucket: BUCKET_NAME}));
         expect(output.$metadata.httpStatusCode).toEqual(200);
-        const files = output.Contents!!.map((content) => content.Key).sort();
-        expect(files).toEqual(["index.html", "styles.css"]);
+        expect(output.KeyCount).toEqual(2);
 
-        s3Client.send(new HeadObjectCommand({Bucket: BUCKET_NAME, Key: "index.html"}));
+        const indexHtml = await headObject("index.html");
+        expect(indexHtml.ContentType).toEqual("text/html; charset=utf-8");
+
+        const stylesCss = await headObject("styles.css");
+        expect(stylesCss.ContentType).toEqual("text/css; charset=utf-8");
     });
 
     afterAll(async () => {

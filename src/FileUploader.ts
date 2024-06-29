@@ -1,4 +1,4 @@
-import {S3Client, ListObjectsV2Command, PutObjectCommand} from "@aws-sdk/client-s3";
+import {S3Client, PutObjectCommand} from "@aws-sdk/client-s3";
 import {FileService} from "FileService";
 
 export class FileUploader {
@@ -20,15 +20,12 @@ export class FileUploader {
                 Bucket: bucket,
                 Key: `${file.name}`,
                 Body: this.fileService.readFile(file.fullPath),
+                ContentType: file.contentType
             }));
             const statusCode = output.$metadata.httpStatusCode;
             if (statusCode !== 200) {
                 throw new Error(`Failed to upload ${file}, status code: ${statusCode}`);
             }
         }
-
-        // a client can be shared by different commands.
-        const output = await this.s3Client.send(new ListObjectsV2Command({Bucket: bucket}));
-        console.log("key count: " + output.KeyCount);
     }
 }

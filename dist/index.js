@@ -57832,72 +57832,84 @@ exports["default"] = _default;
 
 /***/ }),
 
-/***/ 5946:
+/***/ 9497:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.FileUploader = void 0;
-const client_s3_1 = __nccwpck_require__(9250);
-const fs = __importStar(__nccwpck_require__(7561));
+exports.FileService = void 0;
+const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const mime_types_1 = __importDefault(__nccwpck_require__(3583));
-class FileUploader {
-    s3Client;
-    constructor(s3Client) {
-        this.s3Client = s3Client;
-    }
-    async upload(srcDir, bucket) {
-        console.info(`Uploading ${srcDir} to ${bucket}`);
-        const files = fs.readdirSync(srcDir);
+class FileService {
+    listFiles(dir) {
+        const fileInfos = [];
+        const files = node_fs_1.default.readdirSync(dir);
         for (const file of files) {
-            const filePath = `${srcDir}/${file}`;
+            const filePath = `${dir}/${file}`;
             const contentType = mime_types_1.default.lookup(filePath);
             if (contentType === false) {
                 throw new Error(`Could not determine content type for ${filePath}`);
             }
             const contentTypeHeader = mime_types_1.default.contentType(contentType);
-            const s3Dir = 'test';
-            console.log(`${file} => ${contentTypeHeader}`);
+            if (contentTypeHeader === false) {
+                throw new Error(`Could not infer content type header for ${contentType}`);
+            }
+            fileInfos.push({
+                name: file,
+                fullPath: filePath,
+                contentType: contentTypeHeader
+            });
+        }
+        return fileInfos;
+    }
+    /**
+     * Wrapper around fs.readFileSync to make it easier to mock
+     * @param filePath
+     */
+    readFile(filePath) {
+        return node_fs_1.default.readFileSync(filePath);
+    }
+}
+exports.FileService = FileService;
+
+
+/***/ }),
+
+/***/ 5946:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.FileUploader = void 0;
+const client_s3_1 = __nccwpck_require__(9250);
+class FileUploader {
+    fileService;
+    s3Client;
+    constructor(fileService, s3Client) {
+        this.fileService = fileService;
+        this.s3Client = s3Client;
+    }
+    async upload(srcDir, bucket) {
+        console.info(`Uploading ${srcDir} to ${bucket}`);
+        const files = this.fileService.listFiles(srcDir);
+        for (const file of files) {
+            console.log(`uploading ${file.name}`);
             const output = await this.s3Client.send(new client_s3_1.PutObjectCommand({
                 Bucket: bucket,
-                Key: `${file}`,
-                Body: fs.readFileSync(filePath),
+                Key: `${file.name}`,
+                Body: this.fileService.readFile(file.fullPath),
+                ContentType: file.contentType
             }));
             const statusCode = output.$metadata.httpStatusCode;
             if (statusCode !== 200) {
                 throw new Error(`Failed to upload ${file}, status code: ${statusCode}`);
             }
         }
-        // a client can be shared by different commands.
-        const output = await this.s3Client.send(new client_s3_1.ListObjectsV2Command({ Bucket: bucket }));
-        console.log("key count: " + output.KeyCount);
     }
 }
 exports.FileUploader = FileUploader;
@@ -57938,11 +57950,13 @@ const core = __importStar(__nccwpck_require__(2186));
 const FileUploader_1 = __nccwpck_require__(5946);
 const client_s3_1 = __nccwpck_require__(9250);
 const core_1 = __nccwpck_require__(2186);
+const FileService_1 = __nccwpck_require__(9497);
 const accessKeyId = core.getInput('access-key-id', { required: true });
 const secretAccessKey = core.getInput('secret-access-key', { required: true });
 const sessionToken = core.getInput('session-token', { required: true });
 const sourceDir = core.getInput('source-dir', { required: true });
 const bucket = core.getInput('bucket', { required: true });
+const fileService = new FileService_1.FileService();
 const s3Client = new client_s3_1.S3Client({
     credentials: {
         secretAccessKey,
@@ -57950,7 +57964,7 @@ const s3Client = new client_s3_1.S3Client({
         sessionToken
     },
 });
-const fileUploader = new FileUploader_1.FileUploader(s3Client);
+const fileUploader = new FileUploader_1.FileUploader(fileService, s3Client);
 fileUploader.upload(sourceDir, bucket)
     .then(() => core.info("Upload completed"))
     .catch((error) => {
