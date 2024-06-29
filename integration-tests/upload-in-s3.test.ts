@@ -1,11 +1,12 @@
 import {LocalstackContainer, StartedLocalStackContainer} from "@testcontainers/localstack";
 import {
     CreateBucketCommand,
-    CreateBucketCommandInput,
+    CreateBucketCommandInput, HeadObjectCommand,
     ListObjectsV2Command,
     S3Client
 } from "@aws-sdk/client-s3";
 import {FileUploader} from "/FileUploader";
+import {FileService} from "/FileService";
 
 const REGION = "us-east-1";
 const BUCKET_NAME = "testcontainers";
@@ -45,7 +46,8 @@ describe("FileUploader", () => {
         expect(createBucketResponse.$metadata.httpStatusCode).toEqual(200);
 
         // create SUT (system under test)
-        fileUploader = new FileUploader(s3Client);
+        const fileService = new FileService();
+        fileUploader = new FileUploader(fileService, s3Client);
     }, LOCALSTACK_CONTAINER_START_TIMEOUT);
 
     it('should upload static assets', async () => {
@@ -57,6 +59,8 @@ describe("FileUploader", () => {
         expect(output.$metadata.httpStatusCode).toEqual(200);
         const files = output.Contents!!.map((content) => content.Key).sort();
         expect(files).toEqual(["index.html", "styles.css"]);
+
+        s3Client.send(new HeadObjectCommand({Bucket: BUCKET_NAME, Key: "index.html"}));
     });
 
     afterAll(async () => {
