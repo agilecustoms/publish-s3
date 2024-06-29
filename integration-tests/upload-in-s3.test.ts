@@ -48,8 +48,10 @@ describe("FileUploader", () => {
         fileUploader = new FileUploader(s3Client);
     }, LOCALSTACK_CONTAINER_START_TIMEOUT);
 
-    xit('should upload at least one object in a bucket', async () => {
-        await fileUploader.upload('srcDir', BUCKET_NAME);
+    it('should upload static assets', async () => {
+        const srcDir = `${__dirname}/static-assets`;
+
+        await fileUploader.upload(srcDir, BUCKET_NAME);
 
         const output = await s3Client.send(new ListObjectsV2Command({Bucket: BUCKET_NAME}));
         expect(output.$metadata.httpStatusCode).toEqual(200);
