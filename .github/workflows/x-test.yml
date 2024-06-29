@@ -4,11 +4,25 @@ on:
   workflow_dispatch:
 
 jobs:
-  Verify:
+  Test:
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
+      - id: creds
+        name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+#          audience: sts.amazonaws.com
+          aws-region: us-east-1
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_SHARED }}:role/ci/builder
+          output-credentials: true
+
       - name: Upload S3
         uses: agilecustoms/gha-upload-s3@main
         with:
           source_dir: 'dist'
           bucket: 'agilecustoms-tt-web-dist'
+          access_key_id: ${{ steps.creds.outputs.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ steps.creds.outputs.AWS_SECRET_ACCESS_KEY }}
