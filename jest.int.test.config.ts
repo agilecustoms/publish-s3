@@ -6,6 +6,6 @@ import * as base from './jest.config';
  */
 const config: Config.InitialOptions = {...base.default,
     testMatch: ["<rootDir>/integration-tests/**/*.test.ts"],
-    testTimeout: 30_000, // default is 5000 (5 seconds) - is not enough to download the localstack image
+    testTimeout: 60_000, // default is 5000 (5 seconds) - is not enough to download the localstack image
 }
 export default config;

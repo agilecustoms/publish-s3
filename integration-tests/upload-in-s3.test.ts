@@ -10,7 +10,7 @@ import {FileService} from "/FileService";
 
 const REGION = "us-east-1";
 const BUCKET_NAME = "testcontainers";
-const LOCALSTACK_CONTAINER_START_TIMEOUT = 30_000;
+const LOCALSTACK_CONTAINER_START_TIMEOUT = 60_000;
 
 function config(container: StartedLocalStackContainer): object {
     return {
