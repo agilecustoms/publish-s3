@@ -40,7 +40,7 @@ describe("FileUploader", () => {
             ...config(container),
             forcePathStyle: true,
             // retryMode: "standard",
-            // maxAttempts: 10, // when use colima (instead of Docker Desktop) you need more retries :(
+            maxAttempts: 3, // when use colima (instead of Docker Desktop) you need up to 10 retries :(
         });
 
         // create infrastructure that is normally created by Terraform / CloudFormation
