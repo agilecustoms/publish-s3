@@ -1,6 +1,7 @@
 import * as core from "@actions/core";
 import {FileUploader} from "FileUploader";
 import {S3Client} from "@aws-sdk/client-s3";
+import {ExitCode} from "@actions/core";
 
 const accessKeyId: string = core.getInput('access-key-id', {required: true});
 const secretAccessKey: string = core.getInput('secret-access-key', {required: true});
@@ -9,7 +10,6 @@ const sourceDir: string = core.getInput('source-dir', {required: true});
 const bucket: string = core.getInput('bucket', {required: true});
 
 const s3Client = new S3Client({
-    // region: "us-east-1",
     credentials: {
         secretAccessKey,
         accessKeyId,
@@ -23,5 +23,6 @@ fileUploader.upload(sourceDir, bucket)
     .catch((error) => {
         core.error("Upload failed")
         core.error(error);
-        console.error(error);
+        console.error(error); // TODO: remove?
+        process.exitCode = ExitCode.Failure;
     });
