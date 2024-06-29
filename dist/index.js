@@ -57676,9 +57676,9 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const FileUploader_1 = __nccwpck_require__(5946);
 const client_s3_1 = __nccwpck_require__(9250);
-const accessKeyId = core.getInput('access_key_id', { required: true });
-const secretAccessKey = core.getInput('secret_access_key', { required: true });
-const sourceDir = core.getInput('source_dir', { required: true });
+const accessKeyId = core.getInput('access-key-id', { required: true });
+const secretAccessKey = core.getInput('secret-access-key', { required: true });
+const sourceDir = core.getInput('source-dir', { required: true });
 const bucket = core.getInput('bucket', { required: true });
 const s3Client = new client_s3_1.S3Client({
     // region: "us-east-1",

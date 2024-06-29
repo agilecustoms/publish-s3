@@ -14,7 +14,6 @@ jobs:
         name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-#          audience: sts.amazonaws.com
           aws-region: us-east-1
           role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_SHARED }}:role/ci/builder
           output-credentials: true
@@ -22,7 +21,7 @@ jobs:
       - name: Upload S3
         uses: agilecustoms/gha-upload-s3@main
         with:
-          source_dir: 'dist'
+          source-dir: 'dist'
           bucket: 'agilecustoms-tt-web-dist'
-          access_key_id: ${{ steps.creds.outputs.AWS_ACCESS_KEY_ID }}
-          secret_access_key: ${{ steps.creds.outputs.AWS_SECRET_ACCESS_KEY }}
+          access-key-id: '${{ steps.creds.outputs.aws-access-key-id }}'
+          secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
