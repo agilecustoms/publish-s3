@@ -57880,12 +57880,36 @@ exports.FileService = FileService;
 /***/ }),
 
 /***/ 5946:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.FileUploader = void 0;
+const core = __importStar(__nccwpck_require__(2186));
 const client_s3_1 = __nccwpck_require__(9250);
 class FileUploader {
     fileService;
@@ -57894,14 +57918,14 @@ class FileUploader {
         this.fileService = fileService;
         this.s3Client = s3Client;
     }
-    async upload(srcDir, bucket) {
-        console.info(`Uploading ${srcDir} to ${bucket}`);
+    async upload(srcDir, bucket, bucketDir) {
+        core.info(`Uploading ${srcDir} to ${bucket}`);
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
-            console.log(`uploading ${file.name}`);
+            core.debug(`uploading ${file.name}`);
             const output = await this.s3Client.send(new client_s3_1.PutObjectCommand({
                 Bucket: bucket,
-                Key: `${file.name}`,
+                Key: `${bucketDir}/${file.name}`,
                 Body: this.fileService.readFile(file.fullPath),
                 ContentType: file.contentType
             }));
@@ -57945,17 +57969,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const FileUploader_1 = __nccwpck_require__(5946);
 const client_s3_1 = __nccwpck_require__(9250);
 const core_1 = __nccwpck_require__(2186);
 const FileService_1 = __nccwpck_require__(9497);
+const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const accessKeyId = core.getInput('access-key-id', { required: true });
 const secretAccessKey = core.getInput('secret-access-key', { required: true });
 const sessionToken = core.getInput('session-token', { required: true });
 const sourceDir = core.getInput('source-dir', { required: true });
 const bucket = core.getInput('bucket', { required: true });
+const bucketDir = core.getInput('bucket-dir', { required: true });
 const fileService = new FileService_1.FileService();
 const s3Client = new client_s3_1.S3Client({
     credentials: {
@@ -57965,7 +57994,12 @@ const s3Client = new client_s3_1.S3Client({
     },
 });
 const fileUploader = new FileUploader_1.FileUploader(fileService, s3Client);
-fileUploader.upload(sourceDir, bucket)
+core.info("Find out source dir");
+const dir = process.cwd();
+core.info(process.cwd());
+const files = node_fs_1.default.readdirSync(dir);
+core.info(JSON.stringify(files));
+fileUploader.upload(sourceDir, bucket, bucketDir)
     .then(() => core.info("Upload completed"))
     .catch((error) => {
     core.error("Upload failed");
