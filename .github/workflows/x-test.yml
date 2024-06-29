@@ -1,0 +1,11 @@
+name: Manual test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  Verify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Upload S3
+        uses: agilecustoms/gha-upload-s3@main
