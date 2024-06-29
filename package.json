@@ -3,12 +3,13 @@
   "description": "Upload directory to AWS S3",
   "version": "1.0.0",
   "scripts": {
-    "build": "tsc --build"
+    "build": "ncc build src/index.ts"
   },
   "dependencies": {
     "@actions/core": "^1.2.6"
   },
   "devDependencies": {
+    "@vercel/ncc": "^0.38.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
   }
