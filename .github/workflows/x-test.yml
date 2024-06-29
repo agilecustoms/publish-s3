@@ -25,3 +25,4 @@ jobs:
           bucket: 'agilecustoms-tt-web-dist'
           access-key-id: '${{ steps.creds.outputs.aws-access-key-id }}'
           secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
+          session-token: ${{ steps.creds.outputs.aws-session-token }}

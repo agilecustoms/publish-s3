@@ -8,6 +8,9 @@ inputs:
   secret-access-key:
     required: true
     description: AWS secret access key
+  session-token:
+    required: true
+    description: AWS session token
   source-dir:
     required: true
     description: directory at local file system

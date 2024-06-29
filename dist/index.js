@@ -57676,6 +57676,7 @@ const FileUploader_1 = __nccwpck_require__(5946);
 const client_s3_1 = __nccwpck_require__(9250);
 const accessKeyId = core.getInput('access-key-id', { required: true });
 const secretAccessKey = core.getInput('secret-access-key', { required: true });
+const sessionToken = core.getInput('session-token', { required: true });
 const sourceDir = core.getInput('source-dir', { required: true });
 const bucket = core.getInput('bucket', { required: true });
 const s3Client = new client_s3_1.S3Client({
@@ -57683,12 +57684,17 @@ const s3Client = new client_s3_1.S3Client({
     credentials: {
         secretAccessKey,
         accessKeyId,
+        sessionToken
     },
 });
 const fileUploader = new FileUploader_1.FileUploader(s3Client);
 fileUploader.upload(sourceDir, bucket)
     .then(() => core.info("Upload completed"))
-    .catch((error) => core.error("Upload failed", error));
+    .catch((error) => {
+    core.error("Upload failed");
+    core.error(error);
+    console.error(error);
+});
 
 
 /***/ }),
