@@ -1,0 +1,14 @@
+{
+  "name": "upload-s3-action",
+  "description": "Upload directory to AWS S3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+  },
+  "dependencies": {
+
+  },
+  "devDependencies": {
+
+  }
+}
