@@ -16,3 +16,6 @@ jobs:
         run: |
           npm ci
           npm run test
+
+      - name: Integration Tests
+        run: npm run integration-test

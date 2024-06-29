@@ -57633,10 +57633,8 @@ class FileUploader {
     async upload(srcDir, bucket) {
         console.info(`Uploading ${srcDir} to ${bucket}`);
         // a client can be shared by different commands.
-        const params = {};
-        const command = new client_s3_1.ListBucketsCommand(params);
-        const data = await this.s3Client.send(command);
-        console.log("bucket count: " + data.Buckets?.length);
+        const output = await this.s3Client.send(new client_s3_1.ListObjectsV2Command({ Bucket: bucket }));
+        console.log("key count: " + output.KeyCount);
     }
 }
 exports.FileUploader = FileUploader;

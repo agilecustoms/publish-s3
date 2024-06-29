@@ -1,5 +1,4 @@
-import {S3Client, ListBucketsCommand, ListBucketsCommandInput} from "@aws-sdk/client-s3";
-import {ListBucketsOutput} from "@aws-sdk/client-s3/dist-types/models/models_0";
+import {S3Client, ListObjectsV2Command} from "@aws-sdk/client-s3";
 
 export class FileUploader {
     private s3Client: S3Client;
@@ -12,9 +11,7 @@ export class FileUploader {
         console.info(`Uploading ${srcDir} to ${bucket}`);
 
         // a client can be shared by different commands.
-        const params: ListBucketsCommandInput = {};
-        const command: ListBucketsCommand = new ListBucketsCommand(params);
-        const data: ListBucketsOutput = await this.s3Client.send(command);
-        console.log("bucket count: " + data.Buckets?.length);
+        const output = await this.s3Client.send(new ListObjectsV2Command({Bucket: bucket}));
+        console.log("key count: " + output.KeyCount);
     }
 }
