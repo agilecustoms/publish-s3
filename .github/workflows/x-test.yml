@@ -21,8 +21,9 @@ jobs:
       - name: Upload S3
         uses: agilecustoms/gha-upload-s3@main
         with:
-          source-dir: 'dist'
-          bucket: 'agilecustoms-tt-web-dist'
           access-key-id: '${{ steps.creds.outputs.aws-access-key-id }}'
           secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
           session-token: ${{ steps.creds.outputs.aws-session-token }}
+          source-dir: 'dist'
+          bucket: 'agilecustoms-tt-web-dist'
+          bucket-dir: '1.1'

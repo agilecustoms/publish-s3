@@ -17,6 +17,9 @@ inputs:
   bucket:
     required: true
     description: s3 bucket name
+  bucket-dir:
+    required: true
+    description: s3 bucket directory
 #  tags:
 #    required: false
 #    description: tags to be added to s3 objects

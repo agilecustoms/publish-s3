@@ -25,7 +25,7 @@ describe('FileUploader', () => {
         // mock method (optional)
         s3Client.send = jest.fn(() => Promise.resolve({}));
 
-        await fileUploader.upload('srcDir', 'bucket');
+        await fileUploader.upload('srcDir', 'bucket', 'dstDir');
 
         // assert on mock
         // expect(dao.getUser).toHaveBeenCalled();

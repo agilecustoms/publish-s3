@@ -56,20 +56,25 @@ describe("FileUploader", () => {
         fileUploader = new FileUploader(fileService, s3Client);
     }, LOCALSTACK_CONTAINER_START_TIMEOUT);
 
-    it('should upload static assets with valid content types', async () => {
+    it('should upload 1) static assets; 2) with valid content types; 3) to specified bucket dir', async () => {
         const srcDir = `${__dirname}/static-assets`;
+        const dstDir = 'v1';
 
-        await fileUploader.upload(srcDir, BUCKET_NAME);
+        await fileUploader.upload(srcDir, BUCKET_NAME, dstDir);
 
         const output = await s3Client.send(new ListObjectsV2Command({Bucket: BUCKET_NAME}));
         expect(output.$metadata.httpStatusCode).toEqual(200);
         expect(output.KeyCount).toEqual(2);
 
-        const indexHtml = await headObject("index.html");
+        const indexHtml = await headObject(`${dstDir}/index.html`);
         expect(indexHtml.ContentType).toEqual("text/html; charset=utf-8");
 
-        const stylesCss = await headObject("styles.css");
+        const stylesCss = await headObject(`${dstDir}/styles.css`);
         expect(stylesCss.ContentType).toEqual("text/css; charset=utf-8");
+    });
+
+    it('should upload binary file', async () => {
+
     });
 
     afterAll(async () => {
