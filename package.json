@@ -2,11 +2,11 @@
   "name": "upload-s3-action",
   "description": "Upload directory to AWS S3",
   "version": "1.0.0",
-  "main": "src/index.js",
   "scripts": {
     "build": "tsc --build"
   },
   "dependencies": {
+    "@actions/core": "^1.2.6"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",

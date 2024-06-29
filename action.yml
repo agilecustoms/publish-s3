@@ -1,13 +1,13 @@
 name: Upload S3
 description: 'Upload all files from given directory to S3'
 author: Alexey Chekulaev
-#inputs:
-#  source_dir:
-#    required: true
-#    description: directory at local file system
-#  bucket:
-#    required: true
-#    description: s3 bucket name
+inputs:
+  source_dir:
+    required: true
+    description: directory at local file system
+  bucket:
+    required: true
+    description: s3 bucket name
 #  tags:
 #    required: false
 #    description: tags to be added to s3 objects

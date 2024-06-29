@@ -9,3 +9,6 @@ jobs:
     steps:
       - name: Upload S3
         uses: agilecustoms/gha-upload-s3@main
+        with:
+          source_dir: 'dist'
+          bucket: 'agilecustoms-tt-web-dist'
