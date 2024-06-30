@@ -57856,7 +57856,7 @@ class FileService {
             }
             const contentTypeHeader = mime_types_1.default.contentType(contentType);
             if (contentTypeHeader === false) {
-                throw new Error(`Could not infer content type header for ${contentType}`);
+                throw new Error(`Could not infer Content-Type header for ${contentType}`);
             }
             fileInfos.push({
                 name: file,
