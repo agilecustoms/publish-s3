@@ -26,7 +26,7 @@ jobs:
         run: npm run integration-test
 
       # Idea is that if all tests pass, then it deserve to be built
-      # It doesn't matter for 'verify' workflow, but it does for 'verify-and-release' workflow
+      # It doesn't matter for 'build' workflow, but it does for 'build-and-release' workflow
       #  so I don't need to download all dependencies again
       - name: Build
         run: npm run build
