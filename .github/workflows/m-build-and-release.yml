@@ -12,6 +12,8 @@ jobs:
   Release:
     needs: Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # to do 'push' at the end of this job
     steps:
       - name: Checkout
         uses: actions/checkout@v4
