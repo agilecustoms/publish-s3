@@ -21,10 +21,11 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v4
 
-      - name: Debug
-        run: git status
-
       - name: Commit and push
+        id: commit
         uses: stefanzweifel/git-auto-commit-action@v5 # https://github.com/stefanzweifel/git-auto-commit-action
         with:
           commit_message: "Rebuild dist/index.js"
+
+      - name: Summary
+        run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "###New version released" || echo "###No changes") >> $GITHUB_STEP_SUMMARY
