@@ -57919,7 +57919,7 @@ class FileUploader {
         this.s3Client = s3Client;
     }
     async upload(srcDir, bucket, bucketDir, tags = '') {
-        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir} with tags ${tags}`);
+        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}` : ''}`);
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
             core.debug(`uploading ${file.name}`);
