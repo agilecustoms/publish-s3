@@ -22,12 +22,9 @@ describe('FileUploader', () => {
     });
 
     it('should upload files', async () => {
-        // mock method (optional)
-        s3Client.send = jest.fn(() => Promise.resolve({}));
-
         await fileUploader.upload('srcDir', 'bucket', 'dstDir');
 
         // assert on mock
-        // expect(dao.getUser).toHaveBeenCalled();
+        expect(fileService.listFiles).toHaveBeenCalled();
     });
 });
