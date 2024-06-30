@@ -5,7 +5,9 @@
   "scripts": {
     "build": "ncc build src/index.ts",
     "test": "jest --config jest.unit.test.config.ts",
-    "integration-test": "jest --config jest.int.test.config.ts --runInBand"
+    "integration-test": "jest --config jest.int.test.config.ts --runInBand",
+    "lint": "eslint src/*.ts test/*.ts integration-tests/*.ts",
+    "lint:fix": "npm run lint -- --fix"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
@@ -17,9 +19,11 @@
     "@testcontainers/localstack": "^10.9.0",
     "@types/jest": "^29.5.12",
     "@vercel/ncc": "^0.38.1",
+    "eslint": "^8.57.0",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "typescript-eslint": "^7.14.1"
   }
 }

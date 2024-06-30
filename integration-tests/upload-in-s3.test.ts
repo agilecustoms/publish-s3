@@ -58,8 +58,8 @@ describe("FileUploader", () => {
     beforeEach(async () => {
         const listOutput = await s3Client.send(new ListObjectsV2Command(myBucket));
         expect(listOutput.$metadata.httpStatusCode).toEqual(200);
-        if (listOutput.KeyCount === 0) return;
-        const keys: {Key: string}[] = listOutput.Contents!!.map((content) => ({Key: content.Key!!}));
+        if (listOutput.KeyCount === 0 || !listOutput.Contents) return;
+        const keys: {Key: string}[] = listOutput.Contents.map((content) => ({Key: content.Key!!}));
         const deleteOutput = await s3Client.send(new DeleteObjectsCommand({...myBucket, Delete: {Objects: keys}}));
         expect(deleteOutput.$metadata.httpStatusCode).toEqual(200);
     });
