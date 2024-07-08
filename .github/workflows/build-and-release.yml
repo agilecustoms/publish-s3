@@ -1,14 +1,12 @@
 name: Build and Release
 
 on:
-  pull_request_target:
-    types: [closed] # closed could be 'declined', so check it is merged in job 'if' statement
+  push:
     branches:
       - main
 
 jobs:
   Build:
-    if: github.event.pull_request.merged == true
     uses: ./.github/workflows/build.yml
 
   Release:
