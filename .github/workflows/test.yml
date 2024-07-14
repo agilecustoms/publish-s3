@@ -2,6 +2,15 @@ name: Manual test
 
 on:
   workflow_dispatch:
+    inputs:
+      bucket:
+        description: 'AWS S3 bucket'
+        required: true
+        default: 'agilecustoms-tt-web-dist'
+      bucket-dir:
+        description: 'AWS account shared'
+        required: true
+        default: abc
 
 jobs:
   Test:
@@ -28,6 +37,6 @@ jobs:
           secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
           session-token: ${{ steps.creds.outputs.aws-session-token }}
           source-dir: 'dist'
-          bucket: 'agilecustoms-tt-web-dist'
-          bucket-dir: '1.1'
+          bucket: ${{ github.event.inputs.bucket }}
+          bucket-dir: ${{ github.event.inputs.bucket-dir }}
           tags: Release=true&Tag=1.1
