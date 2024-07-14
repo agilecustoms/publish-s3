@@ -22,7 +22,7 @@ describe('FileUploader', () => {
     });
 
     it('should upload files', async () => {
-        await fileUploader.upload('srcDir', 'bucket', 'dstDir');
+        await fileUploader.upload('srcDir', 'bucket', ['dstDir']);
 
         // assert on mock
         expect(fileService.listFiles).toHaveBeenCalled();
