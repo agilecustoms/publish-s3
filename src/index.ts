@@ -12,6 +12,8 @@ const bucket: string = core.getInput('bucket', {required: true});
 const bucketDir: string = core.getInput('bucket-dir', {required: true});
 const tags = core.getInput('tags', { trimWhitespace: true });
 
+const bucketDirs = bucketDir.trim().split(',').map((dir) => dir.trim());
+
 const fileService = new FileService();
 const s3Client = new S3Client({
     credentials: {
@@ -22,7 +24,7 @@ const s3Client = new S3Client({
 });
 const fileUploader = new FileUploader(fileService, s3Client);
 
-fileUploader.upload(sourceDir, bucket, bucketDir, tags)
+fileUploader.upload(sourceDir, bucket, bucketDirs, tags)
     .then(() => core.info("Upload completed"))
     .catch((error) => {
         core.error("Upload failed")

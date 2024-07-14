@@ -36,6 +36,10 @@ describe("FileUploader", () => {
         return output;
     }
 
+    async function upload(srcDir: string, ...bucketDirs: string[]): Promise<void> {
+        await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, bucketDirs);
+    }
+
     beforeAll(async () => {
         container = await new LocalstackContainer().start();
         s3Client = new S3Client({
@@ -65,9 +69,7 @@ describe("FileUploader", () => {
     });
 
     it('should upload 1) static assets; 2) with valid content types; 3) to specified bucket dir', async () => {
-        const srcDir = `${__dirname}/static-assets`;
-
-        await fileUploader.upload(srcDir, BUCKET_NAME, BUCKET_DIR);
+        await upload('static-assets', BUCKET_DIR);
 
         const output = await s3Client.send(new ListObjectsV2Command(myBucket));
         expect(output.$metadata.httpStatusCode).toEqual(200);
@@ -81,9 +83,7 @@ describe("FileUploader", () => {
     });
 
     it('should upload binary file', async () => {
-        const srcDir = `${__dirname}/binary-files`;
-
-        await fileUploader.upload(srcDir, BUCKET_NAME, BUCKET_DIR);
+        await upload('binary-files', BUCKET_DIR);
 
         const binaryFile = await headObject(`${BUCKET_DIR}/helloworld.jar`);
         expect(binaryFile.ContentType).toEqual("application/java-archive");
@@ -93,7 +93,7 @@ describe("FileUploader", () => {
         const srcDir = `${__dirname}/static-assets`;
         const tags = "Release=false&tag2=1.1";
 
-        await fileUploader.upload(srcDir, BUCKET_NAME, BUCKET_DIR, tags);
+        await fileUploader.upload(srcDir, BUCKET_NAME, [BUCKET_DIR], tags);
 
         const output = await s3Client.send(new GetObjectTaggingCommand({...myBucket, Key: `${BUCKET_DIR}/index.html`}));
         expect(output.$metadata.httpStatusCode).toEqual(200);
@@ -101,11 +101,27 @@ describe("FileUploader", () => {
     });
 
     it('should override object', async () => {
-        await fileUploader.upload(`${__dirname}/static-assets`, BUCKET_NAME, BUCKET_DIR);
-        await fileUploader.upload(`${__dirname}/override`, BUCKET_NAME, BUCKET_DIR);
+        await upload('static-assets', BUCKET_DIR);
+        await upload('override', BUCKET_DIR);
 
         const indexHtml = await headObject(`${BUCKET_DIR}/index.html`);
         expect(indexHtml.ContentLength).toEqual("<html>override</html>".length);
+    });
+
+    it('should upload files in two dirs', async () => {
+        await upload('static-assets', 'v1', 'latest');
+
+        const indexHtml = await headObject(`v1/index.html`);
+        expect(indexHtml.ContentType).toEqual("text/html; charset=utf-8");
+
+        const stylesCss = await headObject(`v1/styles.css`);
+        expect(stylesCss.ContentType).toEqual("text/css; charset=utf-8");
+
+        const indexHtml2 = await headObject(`latest/index.html`);
+        expect(indexHtml2.ContentType).toEqual("text/html; charset=utf-8");
+
+        const stylesCss2 = await headObject(`latest/styles.css`);
+        expect(stylesCss2.ContentType).toEqual("text/css; charset=utf-8");
     });
 
     afterAll(async () => {

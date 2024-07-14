@@ -11,7 +11,13 @@ export class FileUploader {
         this.s3Client = s3Client;
     }
 
-    public async upload(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
+    public async upload(srcDir: string, bucket: string, bucketDirs: string[], tags: string = ''): Promise<void> {
+        for (const bucketDir of bucketDirs) {
+            await this.uploadDir(srcDir, bucket, bucketDir, tags);
+        }
+    }
+
+    private async uploadDir(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
         core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}`: ''}`);
 
         const files = this.fileService.listFiles(srcDir);
