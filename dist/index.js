@@ -57918,7 +57918,12 @@ class FileUploader {
         this.fileService = fileService;
         this.s3Client = s3Client;
     }
-    async upload(srcDir, bucket, bucketDir, tags = '') {
+    async upload(srcDir, bucket, bucketDirs, tags = '') {
+        for (const bucketDir of bucketDirs) {
+            await this.uploadDir(srcDir, bucket, bucketDir, tags);
+        }
+    }
+    async uploadDir(srcDir, bucket, bucketDir, tags = '') {
         core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}` : ''}`);
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
@@ -57986,6 +57991,7 @@ const sourceDir = core.getInput('source-dir', { required: true });
 const bucket = core.getInput('bucket', { required: true });
 const bucketDir = core.getInput('bucket-dir', { required: true });
 const tags = core.getInput('tags', { trimWhitespace: true });
+const bucketDirs = bucketDir.trim().split(',').map((dir) => dir.trim());
 const fileService = new FileService_1.FileService();
 const s3Client = new client_s3_1.S3Client({
     credentials: {
@@ -57995,7 +58001,7 @@ const s3Client = new client_s3_1.S3Client({
     },
 });
 const fileUploader = new FileUploader_1.FileUploader(fileService, s3Client);
-fileUploader.upload(sourceDir, bucket, bucketDir, tags)
+fileUploader.upload(sourceDir, bucket, bucketDirs, tags)
     .then(() => core.info("Upload completed"))
     .catch((error) => {
     core.error("Upload failed");
