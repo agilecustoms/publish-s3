@@ -57850,18 +57850,20 @@ class FileService {
         const files = node_fs_1.default.readdirSync(dir);
         for (const file of files) {
             const filePath = `${dir}/${file}`;
-            const contentType = mime_types_1.default.lookup(filePath);
+            let contentType = mime_types_1.default.lookup(filePath);
             if (contentType === false) {
                 throw new Error(`Could not determine content type for ${filePath}`);
             }
-            const contentTypeHeader = mime_types_1.default.contentType(contentType);
-            if (contentTypeHeader === false) {
-                throw new Error(`Could not infer Content-Type header for ${contentType}`);
+            if (contentType.startsWith("text/")) {
+                contentType = mime_types_1.default.contentType(contentType);
+                if (contentType === false) {
+                    throw new Error(`Could not infer Content-Type header for ${contentType}`);
+                }
             }
             fileInfos.push({
                 name: file,
                 fullPath: filePath,
-                contentType: contentTypeHeader
+                contentType
             });
         }
         return fileInfos;
