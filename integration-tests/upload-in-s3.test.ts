@@ -36,6 +36,11 @@ describe("FileUploader", () => {
         return output;
     }
 
+    async function assertCharset(key: string, expected: string): Promise<void> {
+        const output = await headObject(key);
+        expect(output.ContentType).toEqual(expected);
+    }
+
     async function upload(srcDir: string, ...bucketDirs: string[]): Promise<void> {
         await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, bucketDirs);
     }
@@ -75,11 +80,8 @@ describe("FileUploader", () => {
         expect(output.$metadata.httpStatusCode).toEqual(200);
         expect(output.KeyCount).toEqual(2);
 
-        const indexHtml = await headObject(`${BUCKET_DIR}/index.html`);
-        expect(indexHtml.ContentType).toEqual("text/html; charset=utf-8");
-
-        const stylesCss = await headObject(`${BUCKET_DIR}/styles.css`);
-        expect(stylesCss.ContentType).toEqual("text/css; charset=utf-8");
+        await assertCharset(`${BUCKET_DIR}/index.html`, "text/html; charset=utf-8");
+        await assertCharset(`${BUCKET_DIR}/styles.css`, "text/css; charset=utf-8");
     });
 
     it('should upload binary file', async () => {
@@ -111,17 +113,21 @@ describe("FileUploader", () => {
     it('should upload files in two dirs', async () => {
         await upload('static-assets', 'v1', 'latest');
 
-        const indexHtml = await headObject(`v1/index.html`);
-        expect(indexHtml.ContentType).toEqual("text/html; charset=utf-8");
+        await assertCharset(`v1/index.html`, "text/html; charset=utf-8");
+        await assertCharset(`v1/styles.css`, "text/css; charset=utf-8");
 
-        const stylesCss = await headObject(`v1/styles.css`);
-        expect(stylesCss.ContentType).toEqual("text/css; charset=utf-8");
+        await assertCharset(`latest/index.html`, "text/html; charset=utf-8");
+        await assertCharset(`latest/styles.css`, "text/css; charset=utf-8");
+    });
 
-        const indexHtml2 = await headObject(`latest/index.html`);
-        expect(indexHtml2.ContentType).toEqual("text/html; charset=utf-8");
+    it('should upload with charset: html, css. All others w/o charset', async () => {
+        await upload('test-charset', BUCKET_DIR);
 
-        const stylesCss2 = await headObject(`latest/styles.css`);
-        expect(stylesCss2.ContentType).toEqual("text/css; charset=utf-8");
+        await assertCharset(`${BUCKET_DIR}/app.js`, "application/javascript");
+        await assertCharset(`${BUCKET_DIR}/desktop.png`, "image/png");
+        await assertCharset(`${BUCKET_DIR}/index.html`, "text/html; charset=utf-8");
+        await assertCharset(`${BUCKET_DIR}/openapi.json`, "application/json");
+        await assertCharset(`${BUCKET_DIR}/styles.css`, "text/css; charset=utf-8");
     });
 
     afterAll(async () => {
