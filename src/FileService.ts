@@ -7,18 +7,20 @@ export class FileService {
         const files = fs.readdirSync(dir);
         for (const file of files) {
             const filePath = `${dir}/${file}`;
-            const contentType = mime.lookup(filePath);
+            let contentType = mime.lookup(filePath);
             if (contentType === false) {
                 throw new Error(`Could not determine content type for ${filePath}`);
             }
-            const contentTypeHeader = mime.contentType(contentType);
-            if (contentTypeHeader === false) {
-                throw new Error(`Could not infer Content-Type header for ${contentType}`);
+            if (contentType.startsWith("text/")) {
+                contentType = mime.contentType(contentType);
+                if (contentType === false) {
+                    throw new Error(`Could not infer Content-Type header for ${contentType}`);
+                }
             }
             fileInfos.push({
                 name: file,
                 fullPath: filePath,
-                contentType: contentTypeHeader
+                contentType
             });
         }
         return fileInfos;
