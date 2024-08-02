@@ -57847,9 +57847,11 @@ const mime_types_1 = __importDefault(__nccwpck_require__(3583));
 class FileService {
     listFiles(dir) {
         const fileInfos = [];
-        const files = node_fs_1.default.readdirSync(dir);
+        const files = node_fs_1.default.readdirSync(dir, { recursive: true });
         for (const file of files) {
             const filePath = `${dir}/${file}`;
+            if (!node_fs_1.default.statSync(filePath).isFile())
+                continue;
             let contentType = mime_types_1.default.lookup(filePath);
             if (contentType === false) {
                 throw new Error(`Could not determine content type for ${filePath}`);
