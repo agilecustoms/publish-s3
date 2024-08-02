@@ -130,6 +130,13 @@ describe("FileUploader", () => {
         await assertCharset(`${BUCKET_DIR}/styles.css`, "text/css; charset=utf-8");
     });
 
+    it('should upload files from nested dirs', async () => {
+        await upload('nested', BUCKET_DIR);
+
+        await assertCharset(`${BUCKET_DIR}/index.html`, "text/html; charset=utf-8");
+        await assertCharset(`${BUCKET_DIR}/assets/index.js`, "application/javascript");
+    });
+
     afterAll(async () => {
         if (container) {
             await container.stop();

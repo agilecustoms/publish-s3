@@ -4,9 +4,11 @@ import mime from "mime-types";
 export class FileService {
     public listFiles(dir: string): FileInfo[] {
         const fileInfos: FileInfo[] = [];
-        const files = fs.readdirSync(dir);
+        const files = fs.readdirSync(dir, {recursive: true}) as string[];
         for (const file of files) {
             const filePath = `${dir}/${file}`;
+            if (!fs.statSync(filePath).isFile()) continue;
+
             let contentType = mime.lookup(filePath);
             if (contentType === false) {
                 throw new Error(`Could not determine content type for ${filePath}`);
