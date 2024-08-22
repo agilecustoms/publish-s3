@@ -4,7 +4,11 @@ on:
   push:
     branches-ignore:
       - main
-  workflow_call: # can be called from 'verify-and-release' workflow
+  workflow_call: # can be called from 'build-and-release' workflow
+    inputs:
+      artifacts:
+        type: boolean
+        default: false
 
 jobs:
   Build:
@@ -32,6 +36,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifacts
+        if: ${{ inputs.artifacts }}
         uses: actions/upload-artifact@v4
         with:
           path: dist # take everything from dist/ folder
