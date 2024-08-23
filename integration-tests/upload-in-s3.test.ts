@@ -146,7 +146,9 @@ describe("FileUploader", () => {
         expect.assertions(BEFORE_EACH_ASSERTIONS + 1);
         try {
             await upload('test-file', BUCKET_DIR);
+            console.error("Should not reach here");
         } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+            console.error(e.message);
             expect(e.message).toContain('NOTDIR');
         }
     });
