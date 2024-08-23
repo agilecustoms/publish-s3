@@ -13,6 +13,7 @@ describe('FileUploader', () => {
     beforeEach(() => {
         // mock dependency
         fileService = <Partial<FileService>>{
+            exists: jest.fn(() => true),
             listFiles: jest.fn(() => [])
         } as FileService;
         s3Client = <Partial<S3Client>>{

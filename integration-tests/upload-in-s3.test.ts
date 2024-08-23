@@ -137,6 +137,19 @@ describe("FileUploader", () => {
         await assertCharset(`${BUCKET_DIR}/assets/index.js`, "application/javascript");
     });
 
+    it('should not fail if source dir does not exist', async () => {
+        await upload('non-existing', BUCKET_DIR);
+    });
+
+    it('should fail if source-dir points to a file', async () => {
+        try {
+            await upload('test-file', BUCKET_DIR);
+            fail('Should not reach here');
+        } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+            expect(e.message).toContain('NOTDIR');
+        }
+    });
+
     afterAll(async () => {
         if (container) {
             await container.stop();
