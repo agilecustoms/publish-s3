@@ -64,6 +64,7 @@ describe("FileUploader", () => {
         fileUploader = new FileUploader(fileService, s3Client);
     }, LOCALSTACK_CONTAINER_START_TIMEOUT);
 
+    const BEFORE_EACH_ASSERTIONS = 2;
     beforeEach(async () => {
         const listOutput = await s3Client.send(new ListObjectsV2Command(myBucket));
         expect(listOutput.$metadata.httpStatusCode).toEqual(200);
@@ -135,6 +136,19 @@ describe("FileUploader", () => {
 
         await assertCharset(`${BUCKET_DIR}/index.html`, "text/html; charset=utf-8");
         await assertCharset(`${BUCKET_DIR}/assets/index.js`, "application/javascript");
+    });
+
+    it('should not fail if source dir does not exist', async () => {
+        await upload('non-existing', BUCKET_DIR);
+    });
+
+    it('should fail if source-dir points to a file', async () => {
+        expect.assertions(BEFORE_EACH_ASSERTIONS + 1);
+        try {
+            await upload('test-file', BUCKET_DIR);
+        } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
+            expect(e.message).toContain('NOTDIR');
+        }
     });
 
     afterAll(async () => {
