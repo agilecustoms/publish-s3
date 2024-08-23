@@ -2,10 +2,6 @@ import fs from "node:fs";
 import mime from "mime-types";
 
 export class FileService {
-    public exists(dir: string): boolean {
-        return fs.existsSync(dir);
-    }
-
     public listFiles(dir: string): FileInfo[] {
         const fileInfos: FileInfo[] = [];
         const files = fs.readdirSync(dir, {recursive: true}) as string[];
