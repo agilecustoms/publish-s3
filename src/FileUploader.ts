@@ -18,9 +18,7 @@ export class FileUploader {
     }
 
     private async uploadDir(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
-        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}`: ''}`);
-
-        if (!this.fileService.exists(srcDir)) return;
+        core.info(`Uploading ${srcDir}/* to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}`: ''}`);
 
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
