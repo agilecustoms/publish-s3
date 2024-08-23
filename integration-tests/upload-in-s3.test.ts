@@ -64,7 +64,6 @@ describe("FileUploader", () => {
         fileUploader = new FileUploader(fileService, s3Client);
     }, LOCALSTACK_CONTAINER_START_TIMEOUT);
 
-    const BEFORE_EACH_ASSERTIONS = 2;
     beforeEach(async () => {
         const listOutput = await s3Client.send(new ListObjectsV2Command(myBucket));
         expect(listOutput.$metadata.httpStatusCode).toEqual(200);
@@ -143,12 +142,10 @@ describe("FileUploader", () => {
     });
 
     it('should fail if source-dir points to a file', async () => {
-        expect.assertions(BEFORE_EACH_ASSERTIONS + 1);
         try {
             await upload('test-file', BUCKET_DIR);
-            console.error("Should not reach here");
+            fail('Should not reach here');
         } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-            console.error(e.message);
             expect(e.message).toContain('NOTDIR');
         }
     });
