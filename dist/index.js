@@ -58404,9 +58404,6 @@ exports.FileService = void 0;
 const node_fs_1 = __importDefault(__nccwpck_require__(7561));
 const mime_types_1 = __importDefault(__nccwpck_require__(3583));
 class FileService {
-    exists(dir) {
-        return node_fs_1.default.existsSync(dir);
-    }
     listFiles(dir) {
         const fileInfos = [];
         const files = node_fs_1.default.readdirSync(dir, { recursive: true });
@@ -58490,9 +58487,7 @@ class FileUploader {
         }
     }
     async uploadDir(srcDir, bucket, bucketDir, tags = '') {
-        core.info(`Uploading ${srcDir} to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}` : ''}`);
-        if (!this.fileService.exists(srcDir))
-            return;
+        core.info(`Uploading ${srcDir}/* to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}` : ''}`);
         const files = this.fileService.listFiles(srcDir);
         for (const file of files) {
             core.debug(`uploading ${file.name}`);
