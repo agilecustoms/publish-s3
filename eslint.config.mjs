@@ -12,9 +12,9 @@ export default [
     plugin.configs['recommended-flat'],
     {
         rules: {
+            '@stylistic/brace-style': ['error', '1tbs'], // 'else' keyword on the same line as closing brace
             '@stylistic/comma-dangle': 'off', // there are cases when trailing comma desired, and sometimes not
             '@stylistic/indent': ['error', 4], // default is 2
-            '@stylistic/brace-style': ['error', '1tbs'], // 'else' keyword on the same line as closing brace
         }
     }
 ];
