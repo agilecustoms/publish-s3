@@ -6,14 +6,17 @@
     },
     // "removeComments": true, makes no sense as ncc ignores this setting
 
-    // Max Node.js version supported by GitHub actions is 20
-    // reference configuration for Node20 from https://github.com/tsconfig/bases/blob/main/bases/node20.json
+    // Max Node.js version supported by GitHub actions is 20 (as of Oct 2024)
+    // below is reference configuration for Node20 from https://github.com/tsconfig/bases/blob/main/bases/node20.json
+    //  with some modifications
     "lib": ["es2023"],
-    "module": "node16",
+    // default is node16 which allows use both/mix CommonJS and ESModules.
+    // I use only ESModules, so picked highest es* supported by Node20
+    "module": "es2022",
     "target": "es2022",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "moduleResolution": "node16"
+    "moduleResolution": "bundler" // I use "ncc" bundler
   }
 }
