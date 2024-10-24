@@ -4,10 +4,10 @@
   "version": "1.0.0",
   "scripts": {
     "build": "ncc build src/index.ts",
-    "test": "jest --config jest.unit.test.config.ts",
-    "integration-test": "jest --config jest.int.test.config.ts --runInBand",
     "lint": "eslint src/*.ts test/*.ts integration-tests/*.ts",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "test": "jest --config jest.unit.test.config.ts",
+    "integration-test": "jest --config jest.int.test.config.ts --runInBand"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
