@@ -4,7 +4,9 @@
     "paths": {
       "*": ["./src/*"]
     },
+    // "removeComments": true, makes no sense as ncc ignores this setting
 
+    // Max Node.js version supported by GitHub actions is 20
     // reference configuration for Node20 from https://github.com/tsconfig/bases/blob/main/bases/node20.json
     "lib": ["es2023"],
     "module": "node16",

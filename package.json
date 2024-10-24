@@ -3,7 +3,7 @@
   "description": "Upload directory to AWS S3",
   "version": "1.0.0",
   "scripts": {
-    "build": "ncc build src/index.ts",
+    "build": "ncc build src/index.ts --minify",
     "lint": "eslint src/*.ts test/*.ts integration-tests/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "jest --config jest.unit.test.config.ts",
