@@ -27,7 +27,7 @@ jobs:
         id: commit
         uses: stefanzweifel/git-auto-commit-action@v5 # https://github.com/stefanzweifel/git-auto-commit-action
         with:
-          commit_message: "Rebuild dist/index.js"
+          commit_message: "Rebuild dist/index.js [skip ci]" # avoid triggering of another build-and-release workflow
 
       - name: Summary
         run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "### New version released" || echo "### No changes") >> $GITHUB_STEP_SUMMARY
