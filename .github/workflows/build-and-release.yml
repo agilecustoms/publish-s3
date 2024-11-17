@@ -11,6 +11,9 @@ jobs:
     with:
       artifacts: true
 
+  # 1. Generate new version - based on latest tag + git commit message: #major, #minor, #patch
+  # 2. Commit and push
+  # 3. Push two tags: new (generated) version and 'latest'
   Release:
     needs: Build
     runs-on: ubuntu-latest
@@ -28,6 +31,14 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5 # https://github.com/stefanzweifel/git-auto-commit-action
         with:
           commit_message: "Rebuild dist/index.js [skip ci]" # avoid triggering of another build-and-release workflow
+
+      # generate new version and push two tags: new (generated) version and 'latest'
+      - name: Release
+        id: release
+        uses: agilecustoms/gha-release@main
+        with:
+          gh_token: ${{ secrets.GH_ACTIONS_TOKEN }} # Admin PAT to push tags in 'main' branch
+          upload_s3: false
 
       - name: Summary
         run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "### New version released" || echo "### No changes") >> $GITHUB_STEP_SUMMARY
