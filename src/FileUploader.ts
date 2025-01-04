@@ -1,5 +1,5 @@
 import * as core from '@actions/core'
-import { S3Client, PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, type PutObjectCommandInput } from '@aws-sdk/client-s3'
 import { FileService } from 'FileService'
 
 export class FileUploader {

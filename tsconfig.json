@@ -1,23 +1,21 @@
 {
-  "include": ["src/**/*"],
+  "include": [
+    "src"
+  ],
+  // Runtime is Node 20 (max available in GitHub actions as of Jan 2025)
   "compilerOptions": {
-    "outDir": "dist",
-    "paths": {
-      "*": ["./src/*"]
-    },
-    // "removeComments": true, makes no sense as ncc ignores this setting
+    "target": "es2022", // highest fully supported by Node 20
+    "moduleResolution": "bundler", // I use "ncc" bundler, so "outDir" is not needed, "removeComments" ignored
+    "module": "esnext", // recommended for bundlers
 
-    // Max Node.js version supported by GitHub actions is 20 (as of Oct 2024)
-    // below is reference configuration for Node20 from https://github.com/tsconfig/bases/blob/main/bases/node20.json
-    //  with some modifications
-    "lib": ["es2023"],
-    // default is node16 which allows use both/mix CommonJS and ESModules.
-    // I use only ESModules, so picked highest es* supported by Node20
-    "module": "es2022",
-    "target": "es2022",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler" // I use "ncc" bundler
+    // DEFAULTS that are always "good to have" - expect to be the same for all projects
+    "esModuleInterop": true, // ease ESM -> CommonJS if needed. true is default in some 'targets', but want to keep here for clarity
+    "noUncheckedIndexedAccess": true,
+    // "removeComments": true, makes no sense as ncc ignores this setting
+    "skipLibCheck": true,    // skip type checking of declaration files (.d.ts) - allows quick hot reload
+    "strict": true,          // enable all strict type-checking options
+    "verbatimModuleSyntax": true, // force using 'import type' for types
+
+
   }
 }
