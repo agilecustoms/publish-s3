@@ -1,5 +1,11 @@
 import * as core from '@actions/core'
-import { S3Client, PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3'
+import {
+    S3Client,
+    PutObjectCommand,
+    PutObjectCommandInput,
+    DeleteObjectsCommand,
+    ListObjectsV2Command, ObjectIdentifier
+} from '@aws-sdk/client-s3'
 import { FileService } from 'FileService'
 
 export class FileUploader {
@@ -12,12 +18,50 @@ export class FileUploader {
     }
 
     public async upload(srcDir: string, bucket: string, bucketDirs: string[], tags: string = ''): Promise<void> {
-        for (const bucketDir of bucketDirs) {
-            await this.uploadDir(srcDir, bucket, bucketDir, tags)
+        const uploadPromises = bucketDirs.map(bucketDir =>
+            this.uploadDir(srcDir, bucket, bucketDir, tags)
+        )
+        await Promise.all(uploadPromises)
+    }
+
+    private async deleteObjectsInDir(bucket: string, bucketDir: string): Promise<void> {
+        const listCommand = new ListObjectsV2Command({
+            Bucket: bucket,
+            Prefix: bucketDir
+        })
+        const listOutput = await this.s3Client.send(listCommand)
+        let statusCode = listOutput.$metadata.httpStatusCode
+        if (statusCode !== 200) {
+            throw new Error(`Failed to list ${bucket}/${bucketDir}, status code: ${statusCode}`)
+        }
+
+        const contents = listOutput.Contents
+        if (!contents) {
+            return
+        }
+        const keysToDelete: ObjectIdentifier[] = contents.map(obj => ({ Key: obj.Key }))
+
+        core.info(`Deleting files in ${bucket}/${bucketDir}`)
+
+        const deleteObjectsCommand = new DeleteObjectsCommand({
+            Bucket: bucket,
+            Delete: {
+                Objects: keysToDelete,
+                Quiet: false
+            }
+        })
+        const deleteOutput = await this.s3Client.send(deleteObjectsCommand)
+        statusCode = deleteOutput.$metadata.httpStatusCode
+        if (statusCode !== 200) {
+            throw new Error(`Failed to delete ${bucket}/${bucketDir}, status code: ${statusCode}`)
         }
     }
 
     private async uploadDir(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
+        if (bucketDir.endsWith('/latest')) {
+            await this.deleteObjectsInDir(bucket, bucketDir)
+        }
+
         core.info(`Uploading ${srcDir}/* to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}` : ''}`)
 
         const files = this.fileService.listFiles(srcDir)
