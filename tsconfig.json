@@ -9,7 +9,7 @@
     "module": "esnext", // recommended for bundlers
 
     // DEFAULTS that are always "good to have" - expect to be the same for all projects
-    "esModuleInterop": true, // ease ESM -> CommonJS if needed. true is default in some 'targets', but want to keep here for clarity
+    // "esModuleInterop": true, // ease ESM -> CommonJS if needed. true is default in some 'targets', but want to keep here for clarity
     "noUncheckedIndexedAccess": true,
     // "removeComments": true, makes no sense as ncc ignores this setting
     "skipLibCheck": true,    // skip type checking of declaration files (.d.ts) - allows quick hot reload
