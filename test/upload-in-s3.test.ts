@@ -31,6 +31,12 @@ describe('FileUploader', () => {
   let s3Client: S3Client
   let fileUploader: FileUploader
 
+  async function listDir(key: string): Promise<object[]> {
+    const output = await s3Client.send(new ListObjectsV2Command({ ...myBucket, Prefix: key }))
+    expect(output.$metadata.httpStatusCode).toEqual(200)
+    return output.Contents!!
+  }
+
   async function headObject(key: string): Promise<HeadObjectCommandOutput> {
     const output = await s3Client.send(new HeadObjectCommand({ ...myBucket, Key: key }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
@@ -156,6 +162,15 @@ describe('FileUploader', () => {
       return
     }
     throw new Error('should never reach here')
+  })
+
+  it('should delete old files when re-upload in /latest dir', async () => {
+    const dir = 'service/latest'
+    await upload('static-assets', dir) // 2 objects: index.html, styles.css
+    await upload('override', dir) // 1 object: index.html, styles.css suppose to be deleted
+
+    const objects = await listDir(dir)
+    expect(objects.length).toBe(1)
   })
 
   afterAll(async () => {
