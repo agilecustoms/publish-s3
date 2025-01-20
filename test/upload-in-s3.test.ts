@@ -1,12 +1,13 @@
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { LocalstackContainer, StartedLocalStackContainer } from '@testcontainers/localstack'
 import {
   CreateBucketCommand,
-  DeleteObjectsCommand, GetObjectTaggingCommand, HeadObjectCommand, HeadObjectCommandOutput,
+  DeleteObjectsCommand, GetObjectTaggingCommand, HeadObjectCommand, type HeadObjectCommandOutput,
   ListObjectsV2Command,
   S3Client
 } from '@aws-sdk/client-s3'
-import { FileUploader } from '/FileUploader'
-import { FileService } from '/FileService'
+import { FileUploader } from '../src/FileUploader'
+import { FileService } from '../src/FileService'
 
 const REGION = 'us-east-1'
 const BUCKET_NAME = 'testcontainers'
@@ -140,19 +141,21 @@ describe('FileUploader', () => {
   it('should fail if source dir does not exist', async () => {
     try {
       await upload('non-existing', BUCKET_DIR)
-      fail('Should not reach here')
     } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       expect(e.message).toContain('ENOENT')
+      return
     }
+    throw new Error('should never reach here')
   })
 
   it('should fail if source-dir points to a file', async () => {
     try {
       await upload('test-file', BUCKET_DIR)
-      fail('Should not reach here')
     } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       expect(e.message).toContain('NOTDIR')
+      return
     }
+    throw new Error('should never reach here')
   })
 
   afterAll(async () => {

@@ -6,9 +6,8 @@
   "scripts": {
     "lint": "eslint src/*.ts integration-tests/*.ts",
     "lint:fix": "npm run lint -- --fix",
-    "test": "jest --config jest.unit.test.config.ts",
-    "integration-test": "jest --config jest.int.test.config.ts --runInBand",
-    "build": "ncc build src/index.ts --minify"
+    "test": "vitest run --coverage",
+    "build": "ncc build src/index.ts --minify; rm dist/package.json"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
