@@ -1,23 +1,23 @@
 {
-  "include": ["src/**/*"],
+  "include": [
+    "src"
+  ],
+  // Runtime is Node 20 (max available in GitHub actions as of Jan 2025)
+  // instead of 'tsc' the 'ncc' is used - it ignores/overrides some settings, but they are still used by IDE and vitest
   "compilerOptions": {
-    "outDir": "dist",
-    "paths": {
-      "*": ["./src/*"]
-    },
-    // "removeComments": true, makes no sense as ncc ignores this setting
+    "target": "ES2022",            // highest fully supported by Node 20
+    "moduleResolution": "bundler", // ignored by ncc. can use 'nodenext', but bundler allows to omit .js in imports
+    "module": "ESNext",            // ignored by ncc. only appropriate modern value for "bundler" mode
+    // "outDir": "dist"            // ignored by ncc, no matter for IDE. typical value for bundler mode
 
-    // Max Node.js version supported by GitHub actions is 20 (as of Oct 2024)
-    // below is reference configuration for Node20 from https://github.com/tsconfig/bases/blob/main/bases/node20.json
-    //  with some modifications
-    "lib": ["es2023"],
-    // default is node16 which allows use both/mix CommonJS and ESModules.
-    // I use only ESModules, so picked highest es* supported by Node20
-    "module": "es2022",
-    "target": "es2022",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "moduleResolution": "bundler" // I use "ncc" bundler
+    // DEFAULTS that are always "good to have" - expect to be the same for all projects
+    "allowJs": false,             // no need to compile JS, all is TS
+    "noUncheckedIndexedAccess": true,
+    // "removeComments": true,    // ignored by ncc, no matter for IDE
+    "skipLibCheck": true,         // skip type checking of declaration files (.d.ts) - allows quick hot reload
+    "strict": true,               // enable all strict type-checking options
+    "verbatimModuleSyntax": true, // force using 'import type' for types
+
+    // ADDITIONAL SETTINGS (vary per project)
   }
 }
