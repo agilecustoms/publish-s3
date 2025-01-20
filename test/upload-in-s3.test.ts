@@ -114,7 +114,7 @@ describe('FileUploader', () => {
     await upload('override', BUCKET_DIR)
 
     const indexHtml = await headObject(`${BUCKET_DIR}/index.html`)
-    expect(indexHtml.ContentLength).toEqual('<html>override</html>'.length)
+    expect(indexHtml.ContentLength).toEqual('<html lang="en">override</html>'.length)
   })
 
   it('should upload files in two dirs', async () => {
