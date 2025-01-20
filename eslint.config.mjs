@@ -4,7 +4,7 @@ import plugin from '@stylistic/eslint-plugin'
 export default [
     ...tseslint.configs.recommended,
     {
-        files: ['integration-tests/*.ts'],
+        files: ['test/*.ts'],
         rules: {
             '@typescript-eslint/no-extra-non-null-assertion': 'off'
         }
