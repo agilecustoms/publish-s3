@@ -2,8 +2,9 @@
   "name": "upload-s3-action",
   "description": "Upload directory to AWS S3",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
-    "lint": "eslint src/*.ts test/*.ts integration-tests/*.ts",
+    "lint": "eslint src/*.ts integration-tests/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "jest --config jest.unit.test.config.ts",
     "integration-test": "jest --config jest.int.test.config.ts --runInBand",
@@ -18,13 +19,11 @@
   "devDependencies": {
     "@stylistic/eslint-plugin": "^2.9.0",
     "@testcontainers/localstack": "^10.14.0",
-    "@types/jest": "^29.5.12",
     "@vercel/ncc": "^0.38.3",
+    "@vitest/coverage-v8": "^3.0.2",
     "eslint": "^9.9.0",
-    "jest": "^29.7.0",
-    "ts-jest": "^29.1.2",
-    "ts-node": "^10.9.2",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^8.2.0"
+    "typescript-eslint": "^8.2.0",
+    "vitest": "^3.0.2"
   }
 }
