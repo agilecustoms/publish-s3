@@ -8,7 +8,7 @@ on:
         required: true
         default: 'agilecustoms-tt-web-dist'
       bucket-dir:
-        description: 'AWS account shared'
+        description: 'AWS account dist'
         required: true
         default: abc
 
@@ -27,7 +27,7 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-region: us-east-1
-          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_SHARED }}:role/ci/builder
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_DIST }}:role/ci/builder
           output-credentials: true
 
       - name: Upload S3
