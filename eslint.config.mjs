@@ -15,12 +15,11 @@ export default [
             '@typescript-eslint/no-unused-vars': ['error', { // unused var starting from _ is ok
                 'argsIgnorePattern': '^_',
                 'destructuredArrayIgnorePattern': '^_'
-            }
-            ],
+            }],
 
             // Enforce Alphabetical Import Order and Merge Duplicate Imports
             'import/order': ['error', {
-                'alphabetize': { 'order': 'asc', 'caseInsensitive': true }
+                'alphabetize': {'order': 'asc', 'caseInsensitive': true}
             }],
             'import/no-duplicates': 'error',
         }
