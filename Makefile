@@ -1,10 +1,11 @@
 .PHONY: test
 
 # npm list --all - show dependency tree
-# npm outdated - to check outdated packages
-# npm update - to update package-lock.json
 app0-install-deps:
 	@npm install
+
+app0-update-deps:
+	@npm update; npm outdated
 
 app1-lint:
 	@npm run lint

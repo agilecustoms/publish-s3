@@ -1,8 +1,8 @@
 import * as core from '@actions/core'
-import { S3Client } from '@aws-sdk/client-s3'
 import { ExitCode } from '@actions/core'
-import { FileUploader } from './FileUploader'
+import { S3Client } from '@aws-sdk/client-s3'
 import { FileService } from './FileService'
+import { FileUploader } from './FileUploader'
 
 const accessKeyId: string = core.getInput('access-key-id', { required: true })
 const secretAccessKey: string = core.getInput('secret-access-key', { required: true })

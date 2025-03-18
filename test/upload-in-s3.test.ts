@@ -1,13 +1,13 @@
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
-import { LocalstackContainer, StartedLocalStackContainer } from '@testcontainers/localstack'
 import {
   CreateBucketCommand,
   DeleteObjectsCommand, GetObjectTaggingCommand, HeadObjectCommand, type HeadObjectCommandOutput,
   ListObjectsV2Command,
   S3Client
 } from '@aws-sdk/client-s3'
-import { FileUploader } from '../src/FileUploader'
+import { LocalstackContainer, StartedLocalStackContainer } from '@testcontainers/localstack'
+import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import { FileService } from '../src/FileService'
+import { FileUploader } from '../src/FileUploader'
 
 const REGION = 'us-east-1'
 const BUCKET_NAME = 'testcontainers'
