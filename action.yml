@@ -12,7 +12,8 @@ inputs:
     required: true
     description: AWS session token
   source-dir:
-    required: true
+    required: false
+    default: s3
     description: directory at local file system
   bucket:
     required: true
