@@ -37,9 +37,6 @@ jobs:
         id: release
         if: steps.commit.outputs.changes_detected == 'true'
         uses: agilecustoms/gha-release@main
-        with:
-          gh_token: ${{ secrets.GH_ACTIONS_TOKEN }} # Admin PAT to push tags in 'main' branch
-          upload_s3: false
 
       - name: Summary
         run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "### Version ${{ steps.release.outpus.version }} released" || echo "### No changes") >> $GITHUB_STEP_SUMMARY
