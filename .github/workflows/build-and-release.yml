@@ -39,4 +39,4 @@ jobs:
         uses: agilecustoms/gha-release@main
 
       - name: Summary
-        run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "### Version ${{ steps.release.outpus.version }} released" || echo "### No changes") >> $GITHUB_STEP_SUMMARY
+        run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "### Version ${{ steps.release.outputs.version }} released" || echo "### No changes") >> $GITHUB_STEP_SUMMARY
