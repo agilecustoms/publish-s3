@@ -28,3 +28,7 @@ inputs:
 runs:
   using: 'node20'
   main: 'dist/index.js'
+
+# Node 20 is max as of Mar 2024
+# https://docs.github.com/en/actions/sharing-automations/creating-actions/creating-a-javascript-action
+# https://docs.github.com/en/actions/sharing-automations/creating-actions/metadata-syntax-for-github-actions
