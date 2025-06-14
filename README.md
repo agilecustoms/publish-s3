@@ -4,9 +4,9 @@ As of Jan 2025 used only in "gha-release" custom GH action as part of release pr
 
 Main features:
 - Set content type (MIME type) to serve files from "web-site" bucket
-- Add object tags. Primary usecase: Release=true, Release=false. Non release ones are cleaned up after 30 days (not part of this action)
+- Add object tags. Primary usecase: Release=true, Release=false. Non-release ones can be deleted after 30 days
 - Ability to upload in several dirs, primarily to support "latest" directory - handy for development
-- "latest" directory cleaned up first, to avoid clutter
+- to avoid clutter, the "latest" directory first cleaned up, and then files uploaded
 
 ## Usage
 ```yaml
