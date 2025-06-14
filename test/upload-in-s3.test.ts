@@ -53,7 +53,7 @@ describe('FileUploader', () => {
   }
 
   beforeAll(async () => {
-    container = await new LocalstackContainer().start()
+    container = await new LocalstackContainer('localstack/localstack:latest').start()
     s3Client = new S3Client({
       ...config(container),
       forcePathStyle: true,
