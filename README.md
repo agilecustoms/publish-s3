@@ -12,7 +12,7 @@ Main features:
 ```yaml
 steps:
   - name: Upload S3
-    uses: agilecustoms/gha-upload-s3@main
+    uses: agilecustoms/gha-release-s3@main
     with:
       access-key-id: '${{ steps.creds.outputs.aws-access-key-id }}'
       secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
@@ -20,5 +20,6 @@ steps:
       source-dir: 'dist'
       bucket: 'agilecustoms-dist'
       bucket-dir: my-service/1.1,my-service/latest
+      version: '1.2.3'
       tags: Release=true&Tag=1.1
 ```

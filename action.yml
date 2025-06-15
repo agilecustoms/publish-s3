@@ -20,7 +20,10 @@ inputs:
     description: s3 bucket name
   bucket-dir:
     required: true
-    description: s3 bucket directory
+    description: s3 bucket directory - reflect a service being released e.g. 'my-service', 'releases/my-service'
+  version:
+    required: true
+    description: version, e.g. 1.0.0, 2.0-beta, fix-135
   tags:
     required: false
     description: tags to be added to s3 objects. Format is key1=value1&key2=value2

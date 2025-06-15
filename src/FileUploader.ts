@@ -17,7 +17,7 @@ export class FileUploader {
     this.s3Client = s3Client
   }
 
-  public async upload(srcDir: string, bucket: string, bucketDirs: string[], tags: string = ''): Promise<void> {
+  public async upload(srcDir: string, bucket: string, bucketDir: string, version: string, tags: string = ''): Promise<void> {
     const uploadPromises = bucketDirs.map(bucketDir =>
       this.uploadDir(srcDir, bucket, bucketDir, tags)
     )
