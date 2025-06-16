@@ -1,6 +1,6 @@
-# gha-upload-s3
+# release-s3
 GitHub Action to upload objects to Amazon S3
-As of Jan 2025 used only in "gha-release" custom GH action as part of release process 
+Intended to be used only in GH action "agilecustoms/release" as part of release process 
 
 Main features:
 - Set content type (MIME type) to serve files from "web-site" bucket
@@ -11,15 +11,14 @@ Main features:
 ## Usage
 ```yaml
 steps:
-  - name: Upload S3
-    uses: agilecustoms/gha-release-s3@main
+  - name: Upload in S3
+    uses: agilecustoms/release-s3@main
     with:
       access-key-id: '${{ steps.creds.outputs.aws-access-key-id }}'
       secret-access-key: ${{ steps.creds.outputs.aws-secret-access-key }}
       session-token: ${{ steps.creds.outputs.aws-session-token }}
-      source-dir: 'dist'
-      bucket: 'agilecustoms-dist'
-      bucket-dir: my-service/1.1,my-service/latest
-      version: '1.2.3'
+      bucket: '{company}-dist'
+      bucket-dir: my-service
+      versions: 1.2.3,1.2
       tags: Release=true&Tag=1.1
 ```

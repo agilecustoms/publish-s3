@@ -11,19 +11,15 @@ inputs:
   session-token:
     required: true
     description: AWS session token
-  source-dir:
-    required: false
-    default: s3
-    description: directory at local file system
   bucket:
     required: true
     description: s3 bucket name
   bucket-dir:
     required: true
     description: s3 bucket directory - reflect a service being released e.g. 'my-service', 'releases/my-service'
-  version:
+  versions:
     required: true
-    description: version, e.g. 1.0.0, 2.0-beta, fix-135
+    description: ex - 1.2.4,1.2,1,latest; could be 2.0-beta, fix-135
   tags:
     required: false
     description: tags to be added to s3 objects. Format is key1=value1&key2=value2

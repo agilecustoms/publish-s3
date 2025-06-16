@@ -6,7 +6,7 @@ import {
   ListObjectsV2Command,
   type PutObjectCommandInput, type ObjectIdentifier
 } from '@aws-sdk/client-s3'
-import { FileService } from './FileService'
+import { type FileInfo, FileService } from './FileService'
 
 export class FileUploader {
   private fileService: FileService
@@ -18,28 +18,33 @@ export class FileUploader {
   }
 
   public async upload(srcDir: string, bucket: string, bucketDir: string, rawVersions: string, tags: string = ''): Promise<void> {
-    const versions = rawVersions.trim().split(',').map(v => v.trim())
+    const versions = rawVersions.trim().split(' ').map(v => v.trim())
+    if (bucketDir && !bucketDir.endsWith('/')) {
+      bucketDir += '/'
+    }
 
+    const files = this.fileService.listFiles(srcDir)
     const uploadPromises = versions.map(version =>
-      this.uploadDir(srcDir, bucket, bucketDir, tags)
+      this.uploadDir(srcDir, files, bucket, `${bucketDir}${version}`, tags)
     )
     await Promise.all(uploadPromises)
   }
 
-  private async uploadDir(srcDir: string, bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
-    if (bucketDir.endsWith('/latest')) {
-      await this.deleteObjectsInDir(bucket, bucketDir)
-    }
+  private async uploadDir(srcDir: string, files: FileInfo[], bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
+    await this.deleteObjectsInDir(files, bucket, bucketDir)
 
     core.info(`Uploading ${srcDir}/* to ${bucket}/${bucketDir}${tags ? ` with tags ${tags}` : ''}`)
 
-    const files = this.fileService.listFiles(srcDir)
     for (const file of files) {
-      core.debug(`uploading ${file.name}`)
+      core.debug(`uploading ${file.relativePath}`)
+      if (!file.content) {
+        const filePath = `${srcDir}/${file.relativePath}`
+        file.content = this.fileService.readFile(filePath)
+      }
       const input: PutObjectCommandInput = {
         Bucket: bucket,
-        Key: `${bucketDir}/${file.name}`,
-        Body: this.fileService.readFile(file.fullPath),
+        Key: `${bucketDir}/${file.relativePath}`,
+        Body: file.content,
         ContentType: file.contentType
       }
       if (tags.length > 0) {
@@ -53,7 +58,7 @@ export class FileUploader {
     }
   }
 
-  private async deleteObjectsInDir(bucket: string, bucketDir: string): Promise<void> {
+  private async deleteObjectsInDir(newFiles: FileInfo[], bucket: string, bucketDir: string): Promise<void> {
     const listCommand = new ListObjectsV2Command({
       Bucket: bucket,
       Prefix: bucketDir
@@ -68,7 +73,10 @@ export class FileUploader {
     if (!contents) {
       return
     }
-    const keysToDelete: ObjectIdentifier[] = contents.map(obj => ({ Key: obj.Key }))
+    const newFilesSet = new Set(newFiles.map(file => file.relativePath))
+    const keysToDelete: ObjectIdentifier[] = contents
+      .filter(obj => obj.Key && !newFilesSet.has(obj.Key))
+      .map(obj => ({ Key: obj.Key }))
 
     core.info(`Deleting files in ${bucket}/${bucketDir}`)
 

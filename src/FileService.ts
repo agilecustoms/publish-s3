@@ -4,28 +4,32 @@ import mime from 'mime-types'
 export class FileService {
   public listFiles(dir: string): FileInfo[] {
     const fileInfos: FileInfo[] = []
-    const files = fs.readdirSync(dir, { recursive: true }) as string[]
-    for (const file of files) {
-      const filePath = `${dir}/${file}`
-      if (!fs.statSync(filePath).isFile()) continue
+    const relativeFilePaths: string[] = fs.readdirSync(dir, { recursive: true }) as string[]
+    for (const relativePath of relativeFilePaths) {
+      const fullPath = `${dir}/${relativePath}`
+      if (!fs.statSync(fullPath).isFile()) continue
 
-      let contentType = mime.lookup(filePath)
-      if (contentType === false) {
-        throw new Error(`Could not determine content type for ${filePath}`)
-      }
-      if (contentType.startsWith('text/')) {
-        contentType = mime.contentType(contentType)
-        if (contentType === false) {
-          throw new Error(`Could not infer Content-Type header for ${contentType}`)
-        }
-      }
+      const contentType = this.getContentType(fullPath)
       fileInfos.push({
-        name: file,
-        fullPath: filePath,
+        relativePath,
         contentType
       })
     }
     return fileInfos
+  }
+
+  private getContentType(filePath: string): string | undefined {
+    let contentType = mime.lookup(filePath)
+    if (contentType === false) {
+      return undefined
+    }
+    if (contentType.startsWith('text/')) {
+      contentType = mime.contentType(contentType)
+      if (contentType === false) {
+        return undefined
+      }
+    }
+    return contentType
   }
 
   /**
@@ -38,7 +42,7 @@ export class FileService {
 }
 
 export type FileInfo = {
-  name: string
-  fullPath: string
-  contentType: string
+  relativePath: string
+  contentType?: string
+  content?: Buffer
 }

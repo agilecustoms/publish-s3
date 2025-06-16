@@ -12,7 +12,7 @@ import { FileUploader } from '../src/FileUploader'
 const REGION = 'us-east-1'
 const BUCKET_NAME = 'testcontainers'
 const myBucket = { Bucket: BUCKET_NAME }
-const BUCKET_DIR = 'v1'
+const VERSION = 'v1'
 const LOCALSTACK_CONTAINER_START_TIMEOUT = 60_000
 
 function config(container: StartedLocalStackContainer): object {
@@ -38,6 +38,7 @@ describe('FileUploader', () => {
   }
 
   async function headObject(key: string): Promise<HeadObjectCommandOutput> {
+    // throw error if key does not exist
     const output = await s3Client.send(new HeadObjectCommand({ ...myBucket, Key: key }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
     return output
@@ -48,8 +49,9 @@ describe('FileUploader', () => {
     expect(output.ContentType).toEqual(expected)
   }
 
-  async function upload(srcDir: string, ...bucketDirs: string[]): Promise<void> {
-    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, bucketDirs)
+  async function upload(srcDir: string, ...versions: string[]): Promise<void> {
+    const rawVersions = versions.join(' ')
+    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, '', rawVersions)
   }
 
   beforeAll(async () => {
@@ -81,20 +83,20 @@ describe('FileUploader', () => {
   })
 
   it('should upload 1) static assets; 2) with valid content types; 3) to specified bucket dir', async () => {
-    await upload('static-assets', BUCKET_DIR)
+    await upload('static-assets', VERSION)
 
     const output = await s3Client.send(new ListObjectsV2Command(myBucket))
     expect(output.$metadata.httpStatusCode).toEqual(200)
     expect(output.KeyCount).toEqual(2)
 
-    await assertCharset(`${BUCKET_DIR}/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`${BUCKET_DIR}/styles.css`, 'text/css; charset=utf-8')
+    await assertCharset(`${VERSION}/index.html`, 'text/html; charset=utf-8')
+    await assertCharset(`${VERSION}/styles.css`, 'text/css; charset=utf-8')
   })
 
   it('should upload binary file', async () => {
-    await upload('binary-files', BUCKET_DIR)
+    await upload('binary-files', VERSION)
 
-    const binaryFile = await headObject(`${BUCKET_DIR}/helloworld.jar`)
+    const binaryFile = await headObject(`${VERSION}/helloworld.jar`)
     expect(binaryFile.ContentType).toEqual('application/java-archive')
   })
 
@@ -102,18 +104,18 @@ describe('FileUploader', () => {
     const srcDir = `${__dirname}/static-assets`
     const tags = 'Release=false&tag2=1.1'
 
-    await fileUploader.upload(srcDir, BUCKET_NAME, [BUCKET_DIR], tags)
+    await fileUploader.upload(srcDir, BUCKET_NAME, '', VERSION, tags)
 
-    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `${BUCKET_DIR}/index.html` }))
+    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `${VERSION}/index.html` }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
     expect(output.TagSet).toEqual([{ Key: 'Release', Value: 'false' }, { Key: 'tag2', Value: '1.1' }])
   })
 
   it('should override object', async () => {
-    await upload('static-assets', BUCKET_DIR)
-    await upload('override', BUCKET_DIR)
+    await upload('static-assets', VERSION)
+    await upload('override', VERSION)
 
-    const indexHtml = await headObject(`${BUCKET_DIR}/index.html`)
+    const indexHtml = await headObject(`${VERSION}/index.html`)
     expect(indexHtml.ContentLength).toEqual('<html lang="en">override</html>'.length)
   })
 
@@ -128,25 +130,25 @@ describe('FileUploader', () => {
   })
 
   it('should upload with charset: html, css. All others w/o charset', async () => {
-    await upload('test-charset', BUCKET_DIR)
+    await upload('test-charset', VERSION)
 
-    await assertCharset(`${BUCKET_DIR}/app.js`, 'application/javascript')
-    await assertCharset(`${BUCKET_DIR}/desktop.png`, 'image/png')
-    await assertCharset(`${BUCKET_DIR}/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`${BUCKET_DIR}/openapi.json`, 'application/json')
-    await assertCharset(`${BUCKET_DIR}/styles.css`, 'text/css; charset=utf-8')
+    await assertCharset(`${VERSION}/app.js`, 'application/javascript')
+    await assertCharset(`${VERSION}/desktop.png`, 'image/png')
+    await assertCharset(`${VERSION}/index.html`, 'text/html; charset=utf-8')
+    await assertCharset(`${VERSION}/openapi.json`, 'application/json')
+    await assertCharset(`${VERSION}/styles.css`, 'text/css; charset=utf-8')
   })
 
   it('should upload files from nested dirs', async () => {
-    await upload('nested', BUCKET_DIR)
+    await upload('nested', VERSION)
 
-    await assertCharset(`${BUCKET_DIR}/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`${BUCKET_DIR}/assets/index.js`, 'application/javascript')
+    await assertCharset(`${VERSION}/index.html`, 'text/html; charset=utf-8')
+    await assertCharset(`${VERSION}/assets/index.js`, 'application/javascript')
   })
 
   it('should fail if source dir does not exist', async () => {
     try {
-      await upload('non-existing', BUCKET_DIR)
+      await upload('non-existing', VERSION)
     } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       expect(e.message).toContain('ENOENT')
       return
@@ -156,7 +158,7 @@ describe('FileUploader', () => {
 
   it('should fail if source-dir points to a file', async () => {
     try {
-      await upload('test-file', BUCKET_DIR)
+      await upload('test-file', VERSION)
     } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
       expect(e.message).toContain('NOTDIR')
       return

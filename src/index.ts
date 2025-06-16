@@ -7,10 +7,9 @@ import { FileUploader } from './FileUploader'
 const accessKeyId: string = core.getInput('access-key-id', { required: true })
 const secretAccessKey: string = core.getInput('secret-access-key', { required: true })
 const sessionToken: string = core.getInput('session-token', { required: true })
-const sourceDir: string = core.getInput('source-dir', { required: true })
 const bucket: string = core.getInput('bucket', { required: true })
 const bucketDir: string = core.getInput('bucket-dir', { required: true })
-const version: string = core.getInput('version', { required: true })
+const versions: string = core.getInput('versions', { required: true })
 const tags = core.getInput('tags', { trimWhitespace: true })
 
 const fileService = new FileService()
@@ -23,7 +22,7 @@ const s3Client = new S3Client({
 })
 const fileUploader = new FileUploader(fileService, s3Client)
 
-fileUploader.upload(sourceDir, bucket, bucketDir, version, tags)
+fileUploader.upload('s3', bucket, bucketDir, versions, tags)
   .then(() => core.info('Upload completed'))
   .catch((error) => {
     core.error('Upload failed')
