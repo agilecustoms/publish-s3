@@ -6,6 +6,7 @@ import {
   ListObjectsV2Command,
   type PutObjectCommandInput, type ObjectIdentifier
 } from '@aws-sdk/client-s3'
+import type { MetadataBearer } from '@smithy/types/dist-types/response'
 import { type FileInfo, FileService } from './FileService'
 
 export class FileUploader {
@@ -51,10 +52,7 @@ export class FileUploader {
         input.Tagging = tags
       }
       const output = await this.s3Client.send(new PutObjectCommand(input))
-      const statusCode = output.$metadata.httpStatusCode
-      if (statusCode !== 200) {
-        throw new Error(`Failed to upload ${file}, status code: ${statusCode}`)
-      }
+      this.assertStatusCode(output, `Failed to upload ${file}`)
     }
   }
 
@@ -64,10 +62,7 @@ export class FileUploader {
       Prefix: bucketDir
     })
     const listOutput = await this.s3Client.send(listCommand)
-    let statusCode = listOutput.$metadata.httpStatusCode
-    if (statusCode !== 200) {
-      throw new Error(`Failed to list ${bucket}/${bucketDir}, status code: ${statusCode}`)
-    }
+    this.assertStatusCode(listOutput, `Failed to list ${bucket}/${bucketDir}`)
 
     const contents = listOutput.Contents
     if (!contents) {
@@ -77,11 +72,7 @@ export class FileUploader {
     const newFilesSet = new Set(newFiles.map(file => file.relativePath))
     const keysToDelete: ObjectIdentifier[] = contents
       .filter((obj) => {
-        const key = obj.Key
-        if (!key) {
-          return false // delete
-        }
-        const fileName = key.substring(prefixLength) // turn service/latest/index.html into index.html
+        const fileName = obj.Key!.substring(prefixLength) // turn service/latest/index.html into index.html
         return !newFilesSet.has(fileName)
       })
       .map(obj => ({ Key: obj.Key }))
@@ -99,9 +90,13 @@ export class FileUploader {
       }
     })
     const deleteOutput = await this.s3Client.send(deleteObjectsCommand)
-    statusCode = deleteOutput.$metadata.httpStatusCode
+    this.assertStatusCode(deleteOutput, `Failed to delete ${bucket}/${bucketDir}`)
+  }
+
+  private assertStatusCode(output: MetadataBearer, message: string): void {
+    const statusCode = output.$metadata.httpStatusCode
     if (statusCode !== 200) {
-      throw new Error(`Failed to delete ${bucket}/${bucketDir}, status code: ${statusCode}`)
+      throw new Error(`${message}, status code: ${statusCode}`)
     }
   }
 }

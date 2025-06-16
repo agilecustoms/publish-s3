@@ -124,14 +124,6 @@ describe('FileUploader', () => {
     expect(output.TagSet).toEqual([{ Key: 'Release', Value: 'false' }, { Key: 'tag2', Value: '1.1' }])
   })
 
-  it('should override object', async () => {
-    await upload('static-assets', VERSION)
-    await upload('override', VERSION)
-
-    const indexHtml = await assertObject(`${VERSION}/index.html`)
-    expect(indexHtml.ContentLength).toEqual('<html lang="en">override</html>'.length)
-  })
-
   it('should upload files in two versions', async () => {
     await upload('happy-path', 'v1', 'latest')
     await assertObject(`v1/test.txt`)
@@ -155,11 +147,18 @@ describe('FileUploader', () => {
     await assertObject(`${VERSION}/assets/index.js`)
   })
 
-  it('should upload files from nexted dirs to specified dir', async () => {
+  it('should upload files from nested dirs to specified dir', async () => {
     await uploadDir('nested', 'my-service', [VERSION])
 
     await assertObject(`my-service/${VERSION}/index.html`)
     await assertObject(`my-service/${VERSION}/assets/index.js`)
+  })
+
+  it('should upload files w/o extension', async () => {
+    await upload('no-extension', VERSION)
+
+    const output = await assertObject(`${VERSION}/file`)
+    expect(output.ContentType).toEqual('application/octet-stream')
   })
 
   it('should fail if source dir does not exist', async () => {
@@ -182,32 +181,86 @@ describe('FileUploader', () => {
     throw new Error('should never reach here')
   })
 
-  it('should delete old files when re-upload in /latest dir', async () => {
-    const version = 'latest'
-    await upload('static-assets', version) // 2 objects: index.html, styles.css
-    await upload('override', version) // 1 object: index.html, styles.css suppose to be deleted
+  describe('override', () => {
+    it('should override object content', async () => {
+      await upload('static-assets', VERSION)
+      await upload('static-assets-override', VERSION)
 
-    const objects = await listDir(version)
-    expect(objects.length).toBe(1)
-    expect(objects[0].Key).toBe(`${version}/index.html`)
-  })
+      const indexHtml = await assertObject(`${VERSION}/index.html`)
+      expect(indexHtml.ContentLength).toEqual('<html lang="en">override</html>'.length)
+    })
 
-  it('when re-upload files, should delete only files missing in new upload', async () => {
-    const version = 'latest'
-    await upload('static-assets', version) // 2 objects: index.html, styles.css
-    const sendSpy = vi.spyOn(s3Client, 'send')
+    it('should override tags', async () => {
+      const tags = 'Number=1&Boolean=true'
+      await uploadDir('static-assets', 'my-service', [VERSION], tags)
 
-    // upload calls s3Client.send 3 times:
-    // list - to get existing objects
-    // delete - to delete old objects
-    // put - to upload new objects
-    await upload('override', version) // 1 object: index.html, styles.css suppose to be deleted
+      const newTags = 'Number=2&String=abc'
+      await uploadDir('static-assets-override', 'my-service', [VERSION], newTags)
 
-    // should not delete index.html
-    const deleteCmd: DeleteObjectsCommand = sendSpy.mock.calls[1][0]
-    const objects = deleteCmd.input.Delete!!.Objects!!
-    expect(objects.length).toBe(1)
-    expect(objects[0]!!.Key).toBe('latest/styles.css')
+      const outputOverride = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `my-service/${VERSION}/index.html` }))
+      expect(outputOverride.$metadata.httpStatusCode).toEqual(200)
+      expect(outputOverride.TagSet).toEqual([{ Key: 'Number', Value: '2' }, { Key: 'String', Value: 'abc' }])
+    })
+
+    it('should delete old files', async () => {
+      const version = 'latest'
+      await upload('static-assets', version) // 2 objects: index.html, styles.css
+      await upload('static-assets-override', version) // 1 object: index.html, styles.css suppose to be deleted
+
+      const objects = await listDir(version)
+      expect(objects.length).toBe(1)
+      expect(objects[0].Key).toBe(`${version}/index.html`)
+    })
+
+    it('should not call delete if all files are present in new upload', async () => {
+      const version = 'latest'
+      await upload('static-assets', version) // 2 objects: index.html, styles.css
+      const sendSpy = vi.spyOn(s3Client, 'send')
+
+      // upload calls s3Client.send 3 times:
+      // 1 x list - to get existing objects
+      // 0 x delete - to delete old objects, should not happen
+      // 2 x put - to upload new objects
+      await upload('static-assets-override-all', version) // 2 objects: index.html, styles.css
+
+      expect(sendSpy).toHaveBeenCalledTimes(3) // list, put, put (no delete)
+    })
+
+    it('should delete only files missing in new upload', async () => {
+      const version = 'latest'
+      await upload('static-assets', version) // 2 objects: index.html, styles.css
+      const sendSpy = vi.spyOn(s3Client, 'send')
+
+      // upload calls s3Client.send 3 times:
+      // list - to get existing objects
+      // delete - to delete old objects
+      // put - to upload new objects
+      await upload('static-assets-override', version) // 1 object: index.html, styles.css suppose to be deleted
+
+      // should not delete index.html
+      const deleteCmd: DeleteObjectsCommand = sendSpy.mock.calls[1][0]
+      const objects = deleteCmd.input.Delete!!.Objects!!
+      expect(objects.length).toBe(1)
+      expect(objects[0]!!.Key).toBe('latest/styles.css')
+    })
+
+    it('should delete only files missing in new upload - nested', async () => {
+      const version = 'latest'
+      await uploadDir('nested', 'my-service', [version])
+
+      const sendSpy = vi.spyOn(s3Client, 'send')
+      await uploadDir('nested-override', 'my-service', [version])
+
+      // should not delete index.html
+      const deleteCmd: DeleteObjectsCommand = sendSpy.mock.calls[1][0]
+      const objects = deleteCmd.input.Delete!!.Objects!!
+      expect(objects.length).toBe(2)
+      const keys = objects.map(obj => obj.Key)
+      expect(keys).toEqual([
+        'my-service/latest/assets/index.js.map',
+        'my-service/latest/robots.txt'
+      ])
+    })
   })
 
   afterAll(async () => {
