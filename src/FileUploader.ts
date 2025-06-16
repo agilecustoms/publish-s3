@@ -73,10 +73,21 @@ export class FileUploader {
     if (!contents) {
       return
     }
+    const prefixLength = bucketDir.length + 1 // +1 for the trailing slash
     const newFilesSet = new Set(newFiles.map(file => file.relativePath))
     const keysToDelete: ObjectIdentifier[] = contents
-      .filter(obj => obj.Key && !newFilesSet.has(obj.Key))
+      .filter((obj) => {
+        const key = obj.Key
+        if (!key) {
+          return false // delete
+        }
+        const fileName = key.substring(prefixLength) // turn service/latest/index.html into index.html
+        return !newFilesSet.has(fileName)
+      })
       .map(obj => ({ Key: obj.Key }))
+    if (keysToDelete.length === 0) {
+      return
+    }
 
     core.info(`Deleting files in ${bucket}/${bucketDir}`)
 

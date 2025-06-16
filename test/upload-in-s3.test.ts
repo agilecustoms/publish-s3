@@ -5,7 +5,7 @@ import {
   S3Client
 } from '@aws-sdk/client-s3'
 import { LocalstackContainer, StartedLocalStackContainer } from '@testcontainers/localstack'
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { FileService } from '../src/FileService'
 import { FileUploader } from '../src/FileUploader'
 
@@ -37,7 +37,7 @@ describe('FileUploader', () => {
     return output.Contents!!
   }
 
-  async function headObject(key: string): Promise<HeadObjectCommandOutput> {
+  async function assertObject(key: string): Promise<HeadObjectCommandOutput> {
     // throw error if key does not exist
     const output = await s3Client.send(new HeadObjectCommand({ ...myBucket, Key: key }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
@@ -45,13 +45,17 @@ describe('FileUploader', () => {
   }
 
   async function assertCharset(key: string, expected: string): Promise<void> {
-    const output = await headObject(key)
+    const output = await assertObject(key)
     expect(output.ContentType).toEqual(expected)
   }
 
-  async function upload(srcDir: string, ...versions: string[]): Promise<void> {
+  async function uploadDir(srcDir: string, bucketDir: string, versions: string[], tags: string = ''): Promise<void> {
     const rawVersions = versions.join(' ')
-    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, '', rawVersions)
+    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, bucketDir, rawVersions, tags)
+  }
+
+  async function upload(srcDir: string, ...versions: string[]): Promise<void> {
+    await uploadDir(srcDir, '', versions)
   }
 
   beforeAll(async () => {
@@ -82,7 +86,17 @@ describe('FileUploader', () => {
     expect(deleteOutput.$metadata.httpStatusCode).toEqual(200)
   })
 
-  it('should upload 1) static assets; 2) with valid content types; 3) to specified bucket dir', async () => {
+  it('should upload single file in empty dir and one version', async () => {
+    await uploadDir('happy-path', '', [VERSION])
+    await assertObject(`${VERSION}/test.txt`)
+  })
+
+  it('should upload single file in specified dir and one version', async () => {
+    await uploadDir('happy-path', 'my-service', [VERSION])
+    await assertObject(`my-service/${VERSION}/test.txt`)
+  })
+
+  it('should upload static assets with valid content types', async () => {
     await upload('static-assets', VERSION)
 
     const output = await s3Client.send(new ListObjectsV2Command(myBucket))
@@ -96,17 +110,16 @@ describe('FileUploader', () => {
   it('should upload binary file', async () => {
     await upload('binary-files', VERSION)
 
-    const binaryFile = await headObject(`${VERSION}/helloworld.jar`)
+    const binaryFile = await assertObject(`${VERSION}/helloworld.jar`)
     expect(binaryFile.ContentType).toEqual('application/java-archive')
   })
 
   it('should upload file with tags', async () => {
-    const srcDir = `${__dirname}/static-assets`
     const tags = 'Release=false&tag2=1.1'
 
-    await fileUploader.upload(srcDir, BUCKET_NAME, '', VERSION, tags)
+    await uploadDir('happy-path', '', [VERSION], tags)
 
-    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `${VERSION}/index.html` }))
+    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `${VERSION}/test.txt` }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
     expect(output.TagSet).toEqual([{ Key: 'Release', Value: 'false' }, { Key: 'tag2', Value: '1.1' }])
   })
@@ -115,18 +128,14 @@ describe('FileUploader', () => {
     await upload('static-assets', VERSION)
     await upload('override', VERSION)
 
-    const indexHtml = await headObject(`${VERSION}/index.html`)
+    const indexHtml = await assertObject(`${VERSION}/index.html`)
     expect(indexHtml.ContentLength).toEqual('<html lang="en">override</html>'.length)
   })
 
-  it('should upload files in two dirs', async () => {
-    await upload('static-assets', 'v1', 'latest')
-
-    await assertCharset(`v1/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`v1/styles.css`, 'text/css; charset=utf-8')
-
-    await assertCharset(`latest/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`latest/styles.css`, 'text/css; charset=utf-8')
+  it('should upload files in two versions', async () => {
+    await upload('happy-path', 'v1', 'latest')
+    await assertObject(`v1/test.txt`)
+    await assertObject(`latest/test.txt`)
   })
 
   it('should upload with charset: html, css. All others w/o charset', async () => {
@@ -142,8 +151,15 @@ describe('FileUploader', () => {
   it('should upload files from nested dirs', async () => {
     await upload('nested', VERSION)
 
-    await assertCharset(`${VERSION}/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`${VERSION}/assets/index.js`, 'application/javascript')
+    await assertObject(`${VERSION}/index.html`)
+    await assertObject(`${VERSION}/assets/index.js`)
+  })
+
+  it('should upload files from nexted dirs to specified dir', async () => {
+    await uploadDir('nested', 'my-service', [VERSION])
+
+    await assertObject(`my-service/${VERSION}/index.html`)
+    await assertObject(`my-service/${VERSION}/assets/index.js`)
   })
 
   it('should fail if source dir does not exist', async () => {
@@ -167,12 +183,31 @@ describe('FileUploader', () => {
   })
 
   it('should delete old files when re-upload in /latest dir', async () => {
-    const dir = 'service/latest'
-    await upload('static-assets', dir) // 2 objects: index.html, styles.css
-    await upload('override', dir) // 1 object: index.html, styles.css suppose to be deleted
+    const version = 'latest'
+    await upload('static-assets', version) // 2 objects: index.html, styles.css
+    await upload('override', version) // 1 object: index.html, styles.css suppose to be deleted
 
-    const objects = await listDir(dir)
+    const objects = await listDir(version)
     expect(objects.length).toBe(1)
+    expect(objects[0].Key).toBe(`${version}/index.html`)
+  })
+
+  it('when re-upload files, should delete only files missing in new upload', async () => {
+    const version = 'latest'
+    await upload('static-assets', version) // 2 objects: index.html, styles.css
+    const sendSpy = vi.spyOn(s3Client, 'send')
+
+    // upload calls s3Client.send 3 times:
+    // list - to get existing objects
+    // delete - to delete old objects
+    // put - to upload new objects
+    await upload('override', version) // 1 object: index.html, styles.css suppose to be deleted
+
+    // should not delete index.html
+    const deleteCmd: DeleteObjectsCommand = sendSpy.mock.calls[1][0]
+    const objects = deleteCmd.input.Delete!!.Objects!!
+    expect(objects.length).toBe(1)
+    expect(objects[0]!!.Key).toBe('latest/styles.css')
   })
 
   afterAll(async () => {
