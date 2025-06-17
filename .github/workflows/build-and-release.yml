@@ -25,18 +25,12 @@ jobs:
 
       - name: Download artifacts
         uses: actions/download-artifact@v4
+        # after this we have changes in file dist/index.js
 
-      - name: Commit and push
-        id: commit
-        uses: stefanzweifel/git-auto-commit-action@v5 # https://github.com/stefanzweifel/git-auto-commit-action
-        with:
-          commit_message: "Rebuild dist/index.js [skip ci]" # avoid triggering of another build-and-release workflow
-
-      # generate new version and push two tags: new (generated) version and 'latest'
+      # generate new version, commit and push commit + tags
       - name: Release
         id: release
-        if: steps.commit.outputs.changes_detected == 'true'
         uses: agilecustoms/gha-release@main
 
       - name: Summary
-        run: echo $([ "${{ steps.commit.outputs.changes_detected }}" == 'true' ] && echo "### Version ${{ steps.release.outputs.version }} released" || echo "### No changes") >> $GITHUB_STEP_SUMMARY
+        run: echo "### Released ${{ steps.release.outputs.version }} :pushpin:" >> $GITHUB_STEP_SUMMARY
