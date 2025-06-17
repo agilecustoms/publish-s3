@@ -57,9 +57,10 @@ export class FileUploader {
   }
 
   private async deleteObjectsInDir(newFiles: FileInfo[], bucket: string, bucketDir: string): Promise<void> {
+    const prefix = `${bucketDir}/`
     const listCommand = new ListObjectsV2Command({
       Bucket: bucket,
-      Prefix: bucketDir
+      Prefix: prefix
     })
     const listOutput = await this.s3Client.send(listCommand)
     this.assertStatusCode(listOutput, `Failed to list ${bucket}/${bucketDir}`)
@@ -68,7 +69,7 @@ export class FileUploader {
     if (!contents) {
       return
     }
-    const prefixLength = bucketDir.length + 1 // +1 for the trailing slash
+    const prefixLength = prefix.length
     const newFilesSet = new Set(newFiles.map(file => file.relativePath))
     const keysToDelete: ObjectIdentifier[] = contents
       .filter((obj) => {

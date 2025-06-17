@@ -226,6 +226,20 @@ describe('FileUploader', () => {
       expect(sendSpy).toHaveBeenCalledTimes(3) // list, put, put (no delete)
     })
 
+    it('should not call delete if all files are present in new upload - edge case', async () => {
+      await uploadDir('static-assets', 'my-app', ['1.2.4', '1.2']) // 2 objects: index.html, styles.css
+      const sendSpy = vi.spyOn(s3Client, 'send')
+
+      // upload calls s3Client.send 3 times:
+      // 1 x list - to get existing objects
+      // 0 x delete - to delete old objects, should not happen
+      // 2 x put - to upload new objects
+      await uploadDir('static-assets-override-all', 'my-app', ['1.2']) // 2 objects: index.html, styles.css
+
+      // in this test case, I check that override of '1.2' does not delete objects in '1.2.4'
+      expect(sendSpy).toHaveBeenCalledTimes(3) // list, put, put (no delete)
+    })
+
     it('should delete only files missing in new upload', async () => {
       const version = 'latest'
       await upload('static-assets', version) // 2 objects: index.html, styles.css
