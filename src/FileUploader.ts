@@ -81,8 +81,7 @@ export class FileUploader {
       return
     }
 
-    core.info(`Deleting files in ${bucket}/${bucketDir}`)
-    core.info(keysToDelete.map(obj => obj.Key).join('\n'))
+    core.info(`Deleting ${keysToDelete.length} files in ${bucket}/${bucketDir}`)
 
     const deleteObjectsCommand = new DeleteObjectsCommand({
       Bucket: bucket,
