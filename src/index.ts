@@ -8,9 +8,13 @@ const accessKeyId: string = core.getInput('access-key-id', { required: true })
 const secretAccessKey: string = core.getInput('secret-access-key', { required: true })
 const sessionToken: string = core.getInput('session-token', { required: true })
 const bucket: string = core.getInput('bucket', { required: true })
-const bucketDir: string = core.getInput('bucket-dir', { required: true })
+const bucketDir: string = core.getInput('bucket-dir', { required: false })
+const devRelease: boolean = core.getBooleanInput('dev-release', { required: false })
 const versions: string = core.getInput('versions', { required: true })
-const tags = core.getInput('tags', { trimWhitespace: true })
+
+const githubRepository = process.env.GITHUB_REPOSITORY
+const repoName = githubRepository!.split('/')[1]!
+core.info(`Repository name: ${repoName}`)
 
 const fileService = new FileService()
 const s3Client = new S3Client({
@@ -22,7 +26,7 @@ const s3Client = new S3Client({
 })
 const fileUploader = new FileUploader(fileService, s3Client)
 
-fileUploader.upload('s3', bucket, bucketDir, versions, tags)
+fileUploader.upload('s3', bucket, bucketDir, repoName, versions, devRelease)
   .then(() => core.info('Upload completed'))
   .catch((error) => {
     core.error('Upload failed.')

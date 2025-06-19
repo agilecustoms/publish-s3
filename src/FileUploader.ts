@@ -18,15 +18,16 @@ export class FileUploader {
     this.s3Client = s3Client
   }
 
-  public async upload(srcDir: string, bucket: string, bucketDir: string, rawVersions: string, tags: string = ''): Promise<void> {
+  public async upload(srcDir: string, bucket: string, bucketDir: string, service: string, rawVersions: string, devRelease: boolean): Promise<void> {
     const versions = rawVersions.trim().split(' ').map(v => v.trim())
     if (bucketDir && !bucketDir.endsWith('/')) {
       bucketDir += '/'
     }
 
+    const tags = devRelease ? 'Release=false' : 'Release=true'
     const files = this.fileService.listFiles(srcDir)
     const uploadPromises = versions.map(version =>
-      this.uploadDir(srcDir, files, bucket, `${bucketDir}${version}`, tags)
+      this.uploadDir(srcDir, files, bucket, `${bucketDir}${service}/${version}`, tags)
     )
     await Promise.all(uploadPromises)
   }

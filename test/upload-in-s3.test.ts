@@ -31,8 +31,8 @@ describe('FileUploader', () => {
   let s3Client: S3Client
   let fileUploader: FileUploader
 
-  async function listDir(key: string): Promise<object[]> {
-    const output = await s3Client.send(new ListObjectsV2Command({ ...myBucket, Prefix: key }))
+  async function listDir(prefix: string): Promise<{ Key?: string }[]> {
+    const output = await s3Client.send(new ListObjectsV2Command({ ...myBucket, Prefix: prefix }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
     return output.Contents!!
   }
@@ -49,13 +49,13 @@ describe('FileUploader', () => {
     expect(output.ContentType).toEqual(expected)
   }
 
-  async function uploadDir(srcDir: string, bucketDir: string, versions: string[], tags: string = ''): Promise<void> {
+  async function uploadDir(srcDir: string, bucketDir: string, service: string, versions: string[], devRelease: boolean = false): Promise<void> {
     const rawVersions = versions.join(' ')
-    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, bucketDir, rawVersions, tags)
+    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, bucketDir, service, rawVersions, devRelease)
   }
 
   async function upload(srcDir: string, ...versions: string[]): Promise<void> {
-    await uploadDir(srcDir, '', versions)
+    await uploadDir(srcDir, '', 'myservice', versions)
   }
 
   beforeAll(async () => {
@@ -87,13 +87,13 @@ describe('FileUploader', () => {
   })
 
   it('should upload single file in empty dir and one version', async () => {
-    await uploadDir('happy-path', '', [VERSION])
-    await assertObject(`${VERSION}/test.txt`)
+    await uploadDir('happy-path', '', 'myservice', [VERSION])
+    await assertObject(`myservice/${VERSION}/test.txt`)
   })
 
   it('should upload single file in specified dir and one version', async () => {
-    await uploadDir('happy-path', 'my-service', [VERSION])
-    await assertObject(`my-service/${VERSION}/test.txt`)
+    await uploadDir('happy-path', 'dir', 'myservice', [VERSION])
+    await assertObject(`dir/myservice/${VERSION}/test.txt`)
   })
 
   it('should upload static assets with valid content types', async () => {
@@ -103,61 +103,60 @@ describe('FileUploader', () => {
     expect(output.$metadata.httpStatusCode).toEqual(200)
     expect(output.KeyCount).toEqual(2)
 
-    await assertCharset(`${VERSION}/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`${VERSION}/styles.css`, 'text/css; charset=utf-8')
+    await assertCharset(`myservice/${VERSION}/index.html`, 'text/html; charset=utf-8')
+    await assertCharset(`myservice/${VERSION}/styles.css`, 'text/css; charset=utf-8')
   })
 
   it('should upload binary file', async () => {
     await upload('binary-files', VERSION)
 
-    const binaryFile = await assertObject(`${VERSION}/helloworld.jar`)
+    const binaryFile = await assertObject(`myservice/${VERSION}/helloworld.jar`)
     expect(binaryFile.ContentType).toEqual('application/java-archive')
   })
 
-  it('should upload file with tags', async () => {
-    const tags = 'Release=false&tag2=1.1'
+  it('should add tags for devRelease file with tags', async () => {
+    const devRelease = true
+    await uploadDir('happy-path', '', 'myservice', [VERSION], devRelease)
 
-    await uploadDir('happy-path', '', [VERSION], tags)
-
-    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `${VERSION}/test.txt` }))
+    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `myservice/${VERSION}/test.txt` }))
     expect(output.$metadata.httpStatusCode).toEqual(200)
-    expect(output.TagSet).toEqual([{ Key: 'Release', Value: 'false' }, { Key: 'tag2', Value: '1.1' }])
+    expect(output.TagSet).toEqual([{ Key: 'Release', Value: 'false' }])
   })
 
   it('should upload files in two versions', async () => {
     await upload('happy-path', 'v1', 'latest')
-    await assertObject(`v1/test.txt`)
-    await assertObject(`latest/test.txt`)
+    await assertObject(`myservice/v1/test.txt`)
+    await assertObject(`myservice/latest/test.txt`)
   })
 
   it('should upload with charset: html, css. All others w/o charset', async () => {
     await upload('test-charset', VERSION)
 
-    await assertCharset(`${VERSION}/app.js`, 'application/javascript')
-    await assertCharset(`${VERSION}/desktop.png`, 'image/png')
-    await assertCharset(`${VERSION}/index.html`, 'text/html; charset=utf-8')
-    await assertCharset(`${VERSION}/openapi.json`, 'application/json')
-    await assertCharset(`${VERSION}/styles.css`, 'text/css; charset=utf-8')
+    await assertCharset(`myservice/${VERSION}/app.js`, 'application/javascript')
+    await assertCharset(`myservice/${VERSION}/desktop.png`, 'image/png')
+    await assertCharset(`myservice/${VERSION}/index.html`, 'text/html; charset=utf-8')
+    await assertCharset(`myservice/${VERSION}/openapi.json`, 'application/json')
+    await assertCharset(`myservice/${VERSION}/styles.css`, 'text/css; charset=utf-8')
   })
 
   it('should upload files from nested dirs', async () => {
     await upload('nested', VERSION)
 
-    await assertObject(`${VERSION}/index.html`)
-    await assertObject(`${VERSION}/assets/index.js`)
+    await assertObject(`myservice/${VERSION}/index.html`)
+    await assertObject(`myservice/${VERSION}/assets/index.js`)
   })
 
   it('should upload files from nested dirs to specified dir', async () => {
-    await uploadDir('nested', 'my-service', [VERSION])
+    await uploadDir('nested', 'the-dir', 'my-service', [VERSION])
 
-    await assertObject(`my-service/${VERSION}/index.html`)
-    await assertObject(`my-service/${VERSION}/assets/index.js`)
+    await assertObject(`the-dir/my-service/${VERSION}/index.html`)
+    await assertObject(`the-dir/my-service/${VERSION}/assets/index.js`)
   })
 
   it('should upload files w/o extension', async () => {
     await upload('no-extension', VERSION)
 
-    const output = await assertObject(`${VERSION}/file`)
+    const output = await assertObject(`myservice/${VERSION}/file`)
     expect(output.ContentType).toEqual('application/octet-stream')
   })
 
@@ -186,20 +185,8 @@ describe('FileUploader', () => {
       await upload('static-assets', VERSION)
       await upload('static-assets-override', VERSION)
 
-      const indexHtml = await assertObject(`${VERSION}/index.html`)
+      const indexHtml = await assertObject(`myservice/${VERSION}/index.html`)
       expect(indexHtml.ContentLength).toEqual('<html lang="en">override</html>'.length)
-    })
-
-    it('should override tags', async () => {
-      const tags = 'Number=1&Boolean=true'
-      await uploadDir('static-assets', 'my-service', [VERSION], tags)
-
-      const newTags = 'Number=2&String=abc'
-      await uploadDir('static-assets-override', 'my-service', [VERSION], newTags)
-
-      const outputOverride = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `my-service/${VERSION}/index.html` }))
-      expect(outputOverride.$metadata.httpStatusCode).toEqual(200)
-      expect(outputOverride.TagSet).toEqual([{ Key: 'Number', Value: '2' }, { Key: 'String', Value: 'abc' }])
     })
 
     it('should delete old files', async () => {
@@ -207,9 +194,9 @@ describe('FileUploader', () => {
       await upload('static-assets', version) // 2 objects: index.html, styles.css
       await upload('static-assets-override', version) // 1 object: index.html, styles.css suppose to be deleted
 
-      const objects = await listDir(version)
+      const objects = await listDir(`myservice/${version}`)
       expect(objects.length).toBe(1)
-      expect(objects[0].Key).toBe(`${version}/index.html`)
+      expect(objects[0]!!.Key).toBe(`myservice/${version}/index.html`)
     })
 
     it('should not call delete if all files are present in new upload', async () => {
@@ -227,14 +214,14 @@ describe('FileUploader', () => {
     })
 
     it('should not call delete if all files are present in new upload - edge case', async () => {
-      await uploadDir('static-assets', 'my-app', ['1.2.4', '1.2']) // 2 objects: index.html, styles.css
+      await uploadDir('static-assets', 'release', 'my-app', ['1.2.4', '1.2']) // 2 objects: index.html, styles.css
       const sendSpy = vi.spyOn(s3Client, 'send')
 
       // upload calls s3Client.send 3 times:
       // 1 x list - to get existing objects
       // 0 x delete - to delete old objects, should not happen
       // 2 x put - to upload new objects
-      await uploadDir('static-assets-override-all', 'my-app', ['1.2']) // 2 objects: index.html, styles.css
+      await uploadDir('static-assets-override-all', 'release', 'my-app', ['1.2']) // 2 objects: index.html, styles.css
 
       // in this test case, I check that override of '1.2' does not delete objects in '1.2.4'
       expect(sendSpy).toHaveBeenCalledTimes(3) // list, put, put (no delete)
@@ -252,27 +239,27 @@ describe('FileUploader', () => {
       await upload('static-assets-override', version) // 1 object: index.html, styles.css suppose to be deleted
 
       // should not delete index.html
-      const deleteCmd: DeleteObjectsCommand = sendSpy.mock.calls[1][0]
+      const deleteCmd = sendSpy.mock.calls[1]!![0] as DeleteObjectsCommand
       const objects = deleteCmd.input.Delete!!.Objects!!
       expect(objects.length).toBe(1)
-      expect(objects[0]!!.Key).toBe('latest/styles.css')
+      expect(objects[0]!!.Key).toBe('myservice/latest/styles.css')
     })
 
     it('should delete only files missing in new upload - nested', async () => {
       const version = 'latest'
-      await uploadDir('nested', 'my-service', [version])
+      await uploadDir('nested', 'dir', 'my-service', [version])
 
       const sendSpy = vi.spyOn(s3Client, 'send')
-      await uploadDir('nested-override', 'my-service', [version])
+      await uploadDir('nested-override', 'dir', 'my-service', [version])
 
       // should not delete index.html
-      const deleteCmd: DeleteObjectsCommand = sendSpy.mock.calls[1][0]
+      const deleteCmd = sendSpy.mock.calls[1]!![0] as DeleteObjectsCommand
       const objects = deleteCmd.input.Delete!!.Objects!!
       expect(objects.length).toBe(2)
       const keys = objects.map(obj => obj.Key)
       expect(keys).toEqual([
-        'my-service/latest/assets/index.js.map',
-        'my-service/latest/robots.txt'
+        'dir/my-service/latest/assets/index.js.map',
+        'dir/my-service/latest/robots.txt'
       ])
     })
   })
