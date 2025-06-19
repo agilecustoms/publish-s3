@@ -11,9 +11,6 @@ jobs:
     with:
       artifacts: true
 
-  # 1. Generate new version - based on latest tag + git commit message: #major, #minor, #patch
-  # 2. Commit and push
-  # 3. Push two tags: new (generated) version and 'latest'
   Release:
     needs: Build
     runs-on: ubuntu-latest

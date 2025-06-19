@@ -33,7 +33,7 @@ jobs:
         run: npm run build
 
       - name: Upload artifacts
-        if: ${{ inputs.artifacts }}
+        if: inputs.artifacts
         uses: actions/upload-artifact@v4
         with:
           path: dist # take everything from dist/ folder
