@@ -14,7 +14,6 @@ const versions: string = core.getInput('versions', { required: true })
 
 const githubRepository = process.env.GITHUB_REPOSITORY
 const repoName = githubRepository!.split('/')[1]!
-core.info(`Repository name: ${repoName}`)
 
 const fileService = new FileService()
 const s3Client = new S3Client({

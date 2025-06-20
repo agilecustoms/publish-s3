@@ -114,7 +114,16 @@ describe('FileUploader', () => {
     expect(binaryFile.ContentType).toEqual('application/java-archive')
   })
 
-  it('should add tags for devRelease file with tags', async () => {
+  it('should add tag Release=true for release', async () => {
+    const devRelease = false
+    await uploadDir('happy-path', '', 'myservice', [VERSION], devRelease)
+
+    const output = await s3Client.send(new GetObjectTaggingCommand({ ...myBucket, Key: `myservice/${VERSION}/test.txt` }))
+    expect(output.$metadata.httpStatusCode).toEqual(200)
+    expect(output.TagSet).toEqual([{ Key: 'Release', Value: 'true' }])
+  })
+
+  it('should add tag Release=false for dev-release', async () => {
     const devRelease = true
     await uploadDir('happy-path', '', 'myservice', [VERSION], devRelease)
 
