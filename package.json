@@ -16,7 +16,7 @@
     "mime-types": "^2.1.35"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^4.2.0",
+    "@stylistic/eslint-plugin": "^5.0.0",
     "@testcontainers/localstack": "^11.0.0",
     "@types/node": "^20.0.0",
     "@vercel/ncc": "^0.38.3",
