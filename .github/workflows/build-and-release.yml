@@ -34,4 +34,4 @@ jobs:
           GH_TOKEN: ${{ secrets.GH_PUBLIC_RELEASES_TOKEN }}
 
       - name: Summary
-        run: echo "### Released ${{ steps.release.outputs.version }} $([ \"${{ steps.release.outputs.changes_detected }}\" = 'true' ] && echo ':pushpin:' || echo '(no changes)')" >> $GITHUB_STEP_SUMMARY
+        run: echo "### Released ${{ steps.release.outputs.version }} $([ '${{ steps.release.outputs.changes_detected }}' = 'true' ] && echo ':pushpin:' || echo '(no changes)')" >> $GITHUB_STEP_SUMMARY
