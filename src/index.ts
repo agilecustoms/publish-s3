@@ -28,7 +28,7 @@ const fileUploader = new FileUploader(fileService, s3Client)
 fileUploader.upload('s3', bucket, bucketDir, repoName, versions, devRelease)
   .then(() => core.info('Upload completed'))
   .catch((error) => {
-    core.error('Upload failed')
+    core.error('Upload failed.')
     core.error(error)
     process.exitCode = ExitCode.Failure
   })
