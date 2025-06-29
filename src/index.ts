@@ -30,6 +30,5 @@ fileUploader.upload('s3', bucket, bucketDir, repoName, versions, devRelease)
   .catch((error) => {
     core.error('Upload failed.')
     core.error(error)
-    console.error(error) // TODO: remove?
     process.exitCode = ExitCode.Failure
   })
