@@ -1,5 +1,4 @@
 import * as core from '@actions/core'
-import { ExitCode } from '@actions/core'
 import { S3Client } from '@aws-sdk/client-s3'
 import { FileService } from './FileService'
 import { FileUploader } from './FileUploader'
@@ -26,9 +25,4 @@ const s3Client = new S3Client({
 const fileUploader = new FileUploader(fileService, s3Client)
 
 fileUploader.upload('s3', bucket, bucketDir, repoName, versions, devRelease)
-  .then(() => core.info('Upload completed'))
-  .catch((error) => {
-    core.error('Upload failed..')
-    core.error(error)
-    process.exitCode = ExitCode.Failure
-  })
+  .catch(core.setFailed)
