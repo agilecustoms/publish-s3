@@ -7,7 +7,8 @@
     "lint": "eslint src/*.ts test/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --coverage",
-    "build": "ncc build src/index.ts --minify; rm dist/package.json"
+    "build": "ncc build src/index.ts --minify; rm dist/package.json",
+    "prepare": "if [ \"$CI\" != \"true\" ]; then husky; fi"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
@@ -23,6 +24,7 @@
     "@vitest/coverage-v8": "^3.0.2",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
+    "husky": "^9.1.7",
     "typescript": "^5.4.5",
     "typescript-eslint": "^8.2.0",
     "vitest": "^3.0.2"
