@@ -26,6 +26,6 @@ jobs:
 
       - name: Release
         id: release
-        uses: agilecustoms/publish@summary
+        uses: agilecustoms/publish@main
         env:
           GH_TOKEN: ${{ secrets.GH_PUBLIC_RELEASES_TOKEN }}
