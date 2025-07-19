@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/agilecustoms/publish-s3/compare/v0.1.7...v0.1.8) (2025-07-19)
+
+### Bug Fixes
+
+* test summary generation ([8e6012e](https://github.com/agilecustoms/publish-s3/commit/8e6012e8bdbe45436b4a459848cb83eed969dc38))
+
+
 ## [0.1.7](https://github.com/agilecustoms/publish-s3/compare/v0.1.6...v0.1.7) (2025-07-19)
 
 ### Bug Fixes
