@@ -4,11 +4,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "lint": "eslint src/*.ts test/*.ts",
+    "prepare": "if [ \"$CI\" != \"true\" ]; then husky; fi",
+    "lint": "eslint *.{ts,mjs} src/*.ts test/*.ts",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --coverage",
-    "build": "ncc build src/index.ts --minify; rm dist/package.json",
-    "prepare": "if [ \"$CI\" != \"true\" ]; then husky; fi"
+    "build": "ncc build src/index.ts --minify; rm dist/package.json"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
