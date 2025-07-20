@@ -10,13 +10,10 @@ import type { MetadataBearer } from '@smithy/types/dist-types/response'
 import { type FileInfo, FileService } from './FileService'
 
 export class FileUploader {
-  private fileService: FileService
-  private s3Client: S3Client
-
-  constructor(fileService: FileService, s3Client: S3Client) {
-    this.fileService = fileService
-    this.s3Client = s3Client
-  }
+  constructor(
+    private readonly fileService: FileService,
+    private readonly s3Client: S3Client
+  ) {}
 
   public async upload(srcDir: string, bucket: string, bucketDir: string, service: string, rawVersions: string, devRelease: boolean): Promise<void> {
     const versions = rawVersions.trim().split(' ').map(v => v.trim())
