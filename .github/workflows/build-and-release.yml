@@ -26,5 +26,7 @@ jobs:
 
       - name: Release
         uses: agilecustoms/publish@main
+        with:
+          changelog-file: '' # test empty value
         env:
           GH_TOKEN: ${{ secrets.GH_PUBLIC_RELEASES_TOKEN }}
