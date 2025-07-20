@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.12](https://github.com/agilecustoms/publish-s3/compare/v0.1.11...v0.1.12) (2025-07-20)
+
+### Bug Fixes
+
+* update deps ([6956e82](https://github.com/agilecustoms/publish-s3/commit/6956e82921907571386f45407a0aad137baee7a0))
+
+
+### Reverts
+
+* Revert "fix: try to omit changelog update" ([60a2439](https://github.com/agilecustoms/publish-s3/commit/60a24397c7b454a934baba4c963155fd189e6905))
+
+
 ## [0.1.10](https://github.com/agilecustoms/publish-s3/compare/v0.1.9...v0.1.10) (2025-07-20)
 
 ### Bug Fixes
