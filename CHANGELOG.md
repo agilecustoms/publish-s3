@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/agilecustoms/publish-s3/compare/v0.1.9...v0.1.10) (2025-07-20)
+
+### Bug Fixes
+
+* use readonly keyword to simplify code a bit ([e29d080](https://github.com/agilecustoms/publish-s3/commit/e29d0809a6e6c50b31d4c2e3a8204b1622b4b664))
+
+
 ## [0.1.9](https://github.com/agilecustoms/publish-s3/compare/v0.1.8...v0.1.9) (2025-07-19)
 
 ### Bug Fixes
