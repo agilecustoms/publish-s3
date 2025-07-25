@@ -1,8 +1,24 @@
 {
   "name": "upload-s3-action",
-  "description": "Upload directory to AWS S3",
   "version": "1.0.0",
+  "description": "Upload directory to AWS S3",
+  "keywords": ["github-action", "aws", "s3", "upload"],
+  "homepage": "https://github.com/agilecustoms/publish-s3",
+  "bugs": {
+    "url": "https://github.com/agilecustoms/publish-s3/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agilecustoms/publish-s3.git"
+  },
+  "license": "MIT",
+  "author": "Alexey Chekulaev <chekulaevalexey@gmail.com> (https://github.com/laxa1986)",
   "type": "module",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "private": true,
   "scripts": {
     "prepare": "if [ \"$CI\" != \"true\" ]; then husky; fi",
     "lint": "eslint *.{ts,mjs} \"src/**/*.ts\" \"test/**/*.ts\"",
