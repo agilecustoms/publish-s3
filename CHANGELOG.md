@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.14](https://github.com/agilecustoms/publish-s3/compare/v0.1.13...v0.1.14) (2025-07-25)
+
+### Bug Fixes
+
+* additional fields in package.json ([74d2990](https://github.com/agilecustoms/publish-s3/commit/74d2990b192f204f97a4cc8766aafea77ea27f40))
+
+
 ## [0.1.13](https://github.com/agilecustoms/publish-s3/compare/v0.1.12...v0.1.13) (2025-07-25)
 
 ### Bug Fixes
