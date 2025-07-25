@@ -1,8 +1,13 @@
 {
   "name": "upload-s3-action",
-  "version": "1.0.0",
+  "version": "0.1.15",
   "description": "Upload directory to AWS S3",
-  "keywords": ["github-action", "aws", "s3", "upload"],
+  "keywords": [
+    "github-action",
+    "aws",
+    "s3",
+    "upload"
+  ],
   "homepage": "https://github.com/agilecustoms/publish-s3",
   "bugs": {
     "url": "https://github.com/agilecustoms/publish-s3/issues"

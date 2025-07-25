@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.15](https://github.com/agilecustoms/publish-s3/compare/v0.1.14...v0.1.15) (2025-07-25)
+
+### Bug Fixes
+
+* use new publish version ([b1b63db](https://github.com/agilecustoms/publish-s3/commit/b1b63dbdad55c7e1d513eff7cb8518edcc1d5889))
+
+
 ## [0.1.14](https://github.com/agilecustoms/publish-s3/compare/v0.1.13...v0.1.14) (2025-07-25)
 
 ### Bug Fixes
