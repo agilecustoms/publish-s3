@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.13](https://github.com/agilecustoms/publish-s3/compare/v0.1.12...v0.1.13) (2025-07-25)
+
+### Bug Fixes
+
+* update documentation ([9cf92c1](https://github.com/agilecustoms/publish-s3/commit/9cf92c1202ce510e8fd3666fdab7560a0aec6eab))
+
+
 ## [0.1.12](https://github.com/agilecustoms/publish-s3/compare/v0.1.11...v0.1.12) (2025-07-20)
 
 ### Bug Fixes
