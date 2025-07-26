@@ -27,3 +27,15 @@ Parameters are not documented: part of them are pass through from `publish` acti
     versions: ${{ steps.version.outputs.tags }}
     dev-release: ${{ inputs.dev-release }}
 ```
+
+## Inputs
+
+| Name                | Required | Description                                                                                                                                          |
+|---------------------|----------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `access-key-id`     | **Yes**  | AWS access key ID for authentication                                                                                                                 |
+| `bucket`            | **Yes**  | S3 bucket name where files will be uploaded                                                                                                          |
+| `bucket-dir`        | No       | S3 bucket directory path. Files will be uploaded to `bucket/bucket-dir/repo-name/version/`. Can be empty string for root level                       |
+| `dev-release`       | No       | If `true`, uploads with tag `Release=false` for dev/temporary releases. If `false` or empty, uploads with tag `Release=true` for production releases |
+| `secret-access-key` | **Yes**  | AWS secret access key for authentication                                                                                                             |
+| `session-token`     | **Yes**  | AWS session token for authentication                                                                                                                 |
+| `versions`          | **Yes**  | Space-separated list of versions to upload. Examples: `1.2.4 1.2 1 latest` for semantic versioning, or `2.0-beta` `fix-135` for custom versions      |

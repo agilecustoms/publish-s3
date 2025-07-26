@@ -15,10 +15,10 @@ inputs:
     required: true
     description: s3 bucket name
   bucket-dir:
-    required: true
+    required: false
     description: s3 bucket directory to place - 'bucket/bucket-dir/repo-name/version', empty by default
   dev-release:
-    required: true
+    required: false
     description: 'if true, will upload to "dev" bucket, otherwise to "prod" bucket'
   versions:
     required: true
