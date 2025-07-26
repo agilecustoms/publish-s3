@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.16](https://github.com/agilecustoms/publish-s3/compare/v0.1.15...v0.1.16) (2025-07-26)
+
+### Bug Fixes
+
+* rename agilecustoms/publish -> release ([1ea44f6](https://github.com/agilecustoms/publish-s3/commit/1ea44f6b89d8b70dfbab632e837b91c528dfee93))
+
+
 ## [0.1.15](https://github.com/agilecustoms/publish-s3/compare/v0.1.14...v0.1.15) (2025-07-25)
 
 ### Bug Fixes
