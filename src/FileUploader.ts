@@ -27,7 +27,7 @@ export class FileUploader {
       this.uploadDir(srcDir, files, bucket, `${bucketDir}${service}/${version}`, tags)
     )
     await Promise.all(uploadPromises)
-    core.info('Upload completed')
+    core.info('Upload complete')
   }
 
   private async uploadDir(srcDir: string, files: FileInfo[], bucket: string, bucketDir: string, tags: string = ''): Promise<void> {
