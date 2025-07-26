@@ -1,12 +1,12 @@
 # publish-s3
 
 GitHub Action to upload objects to Amazon S3.
-Intended to be used only as part of GH action [agilecustoms/publish](https://github.com/agilecustoms/publish)
+Intended to be used only as part of GH action [agilecustoms/release](https://github.com/agilecustoms/release)
 
 Main features:
 - Set content type (MIME type) to serve files from the "website" bucket
 - In normal mode adds tag `Release=true`, in dev-mode adds tag: `Release=false`. This allows automatic removals.
-Read more about [release types](https://github.com/agilecustoms/publish/blob/main/docs/release-types.md)
+Read more about [release types](https://github.com/agilecustoms/release/blob/main/docs/release-types.md)
 - Ability to upload in several dirs to support semantic versioning: `/myservice/1.2.4`, `/myservice/1.2`, `/myservice/1`, `/myservice/latest`
 - To avoid clutter, the directories are first cleaned up, and then files uploaded
 
