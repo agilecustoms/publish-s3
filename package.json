@@ -1,6 +1,6 @@
 {
   "name": "upload-s3-action",
-  "version": "0.1.16",
+  "version": "0.1.17",
   "description": "Upload directory to AWS S3",
   "keywords": [
     "github-action",

@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.17](https://github.com/agilecustoms/publish-s3/compare/v0.1.16...v0.1.17) (2025-07-26)
+
+### Bug Fixes
+
+* minor change to test re-build ([0a4d9b5](https://github.com/agilecustoms/publish-s3/commit/0a4d9b59269a40221e87145efd2c9f26c78d0ac0))
+
+
 ## [0.1.16](https://github.com/agilecustoms/publish-s3/compare/v0.1.15...v0.1.16) (2025-07-26)
 
 ### Bug Fixes
