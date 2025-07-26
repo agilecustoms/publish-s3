@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.18](https://github.com/agilecustoms/publish-s3/compare/v0.1.17...v0.1.18) (2025-07-26)
+
+### Bug Fixes
+
+* add Inputs section and mark to inputs as not required ([9db1cc1](https://github.com/agilecustoms/publish-s3/commit/9db1cc16f531e2ab4f3f21d7ae44486742545d11))
+
+
 ## [0.1.17](https://github.com/agilecustoms/publish-s3/compare/v0.1.16...v0.1.17) (2025-07-26)
 
 ### Bug Fixes
