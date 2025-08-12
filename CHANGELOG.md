@@ -1,5 +1,16 @@
 # Changelog
 
+## [1.0.0](https://github.com/agilecustoms/publish-s3/compare/v0.1.18...v1.0.0) (2025-08-12)
+
+### ⚠ BREAKING CHANGES
+
+* release v1.0.0 (update deps, name, keywords)
+
+### Features
+
+* release v1.0.0 (update deps, name, keywords) ([d056b56](https://github.com/agilecustoms/publish-s3/commit/d056b56de53616494da35b30bc979644ded9b3a8))
+
+
 ## [0.1.18](https://github.com/agilecustoms/publish-s3/compare/v0.1.17...v0.1.18) (2025-07-26)
 
 ### Bug Fixes
