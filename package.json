@@ -1,10 +1,12 @@
 {
-  "name": "upload-s3-action",
+  "name": "publish-s3",
   "version": "0.1.18",
-  "description": "Upload directory to AWS S3",
+  "description": "Publish (upload) files from ./s3 directory to AWS S3",
   "keywords": [
-    "github-action",
     "aws",
+    "github-action",
+    "publish",
+    "release",
     "s3",
     "upload"
   ],
