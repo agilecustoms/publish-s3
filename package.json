@@ -31,7 +31,7 @@
     "lint": "eslint *.{ts,mjs} \"src/**/*.ts\" \"test/**/*.ts\"",
     "lint:fix": "npm run lint -- --fix",
     "test": "vitest run --coverage",
-    "build": "ncc build src/index.ts --minify; rm dist/package.json"
+    "build": "ncc build src/index.ts; rm dist/package.json"
   },
   "dependencies": {
     "@actions/core": "^1.2.6",
