@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1-next.2](https://github.com/agilecustoms/publish-s3/compare/v1.0.1-next.1...v1.0.1-next.2) (2025-08-20)
+
+### Miscellaneous
+
+* restore minify ([7118339](https://github.com/agilecustoms/publish-s3/commit/7118339469ab87d6e481ec1dc10ce89b5e96f53d))
+
+
 ## [1.0.1-next.1](https://github.com/agilecustoms/publish-s3/compare/v1.0.0...v1.0.1-next.1) (2025-08-20)
 
 ### Bug Fixes
