@@ -20,6 +20,7 @@ inputs:
   dev-release:
     required: false
     description: 'if true, will upload to "dev" bucket, otherwise to "prod" bucket'
+    default: false
   versions:
     required: true
     description: ex - 1.2.4,1.2,1,latest; could be 2.0-beta, fix-135

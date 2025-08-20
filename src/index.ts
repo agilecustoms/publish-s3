@@ -8,7 +8,7 @@ const secretAccessKey: string = core.getInput('secret-access-key', { required: t
 const sessionToken: string = core.getInput('session-token', { required: true })
 const bucket: string = core.getInput('bucket', { required: true })
 const bucketDir: string = core.getInput('bucket-dir', { required: false })
-const devRelease: boolean = core.getBooleanInput('dev-release', { required: false })
+const devRelease: boolean = core.getInput('dev-release', { required: false }) === 'true'
 const versions: string = core.getInput('versions', { required: true })
 
 const githubRepository = process.env.GITHUB_REPOSITORY

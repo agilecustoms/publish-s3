@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - main
+      - next
   workflow_call: # can be called from 'build-and-release' workflow
     inputs:
       artifacts:

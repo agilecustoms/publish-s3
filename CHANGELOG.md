@@ -1,5 +1,23 @@
 # Changelog
 
+## [1.0.1-next.2](https://github.com/agilecustoms/publish-s3/compare/v1.0.1-next.1...v1.0.1-next.2) (2025-08-20)
+
+### Miscellaneous
+
+* restore minify ([7118339](https://github.com/agilecustoms/publish-s3/commit/7118339469ab87d6e481ec1dc10ce89b5e96f53d))
+
+
+## [1.0.1-next.1](https://github.com/agilecustoms/publish-s3/compare/v1.0.0...v1.0.1-next.1) (2025-08-20)
+
+### Bug Fixes
+
+* get dev-release as string and compare to 'true' ([12cca40](https://github.com/agilecustoms/publish-s3/commit/12cca40debf4cc24e8beead073ce13dfe56e2639))
+
+### Miscellaneous
+
+* use token from release env ([2d426a4](https://github.com/agilecustoms/publish-s3/commit/2d426a42859a2c2d642df65a75680f16f917f18e))
+
+
 ## [1.0.0](https://github.com/agilecustoms/publish-s3/compare/v0.1.18...v1.0.0) (2025-08-12)
 
 ### ⚠ BREAKING CHANGES

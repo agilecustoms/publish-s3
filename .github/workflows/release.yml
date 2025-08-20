@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - next
 
 jobs:
   Build:
@@ -14,6 +15,7 @@ jobs:
   Release:
     needs: Build
     runs-on: ubuntu-latest
+    environment: release
     steps:
       - name: Checkout
         uses: actions/checkout@v4
