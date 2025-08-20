@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/agilecustoms/publish-s3/compare/v1.0.0...v1.0.1) (2025-08-20)
+
+### Bug Fixes
+
+* Gracefully handle dev-release input ([#17](https://github.com/agilecustoms/publish-s3/issues/17)) ([c5330d9](https://github.com/agilecustoms/publish-s3/commit/c5330d9dc67bd1b31d15c256a3581faa5284aa76))
+
+
 ## [1.0.1-next.2](https://github.com/agilecustoms/publish-s3/compare/v1.0.1-next.1...v1.0.1-next.2) (2025-08-20)
 
 ### Miscellaneous
