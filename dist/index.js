@@ -64006,7 +64006,7 @@ const secretAccessKey = core.getInput('secret-access-key', { required: true });
 const sessionToken = core.getInput('session-token', { required: true });
 const bucket = core.getInput('bucket', { required: true });
 const bucketDir = core.getInput('bucket-dir', { required: false });
-const devRelease = core.getBooleanInput('dev-release', { required: false });
+const devRelease = core.getInput('dev-release', { required: false }) === 'true';
 const versions = core.getInput('versions', { required: true });
 const githubRepository = process.env.GITHUB_REPOSITORY;
 const repoName = githubRepository.split('/')[1];
