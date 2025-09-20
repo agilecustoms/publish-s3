@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/agilecustoms/publish-s3/compare/v1.0.1...v1.0.2) (2025-09-20)
+
+### Miscellaneous
+
+* update deps, use new GH actions ([d61ba0e](https://github.com/agilecustoms/publish-s3/commit/d61ba0e9be91f645edc7f2461ed39397960b9bcd))
+
+
 ## [1.0.1](https://github.com/agilecustoms/publish-s3/compare/v1.0.0...v1.0.1) (2025-08-20)
 
 ### Bug Fixes
