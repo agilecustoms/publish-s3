@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/agilecustoms/publish-s3/compare/v2.0.0...v2.0.1) (2025-09-21)
+
+### Miscellaneous
+
+* use node24 types ([2774f88](https://github.com/agilecustoms/publish-s3/commit/2774f88573f069a9ce047b5572be040a18f33b81))
+
+
 ## [2.0.0](https://github.com/agilecustoms/publish-s3/compare/v1.0.2...v2.0.0) (2025-09-21)
 
 ### ⚠ BREAKING CHANGES
