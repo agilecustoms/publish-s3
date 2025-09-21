@@ -2,10 +2,10 @@
   "include": [
     "src"
   ],
-  // Runtime is Node 20 (max available in GitHub actions as of Jan 2025)
+  // Runtime is Node 24 (max available in GitHub actions as of Sep 2025)
   // instead of 'tsc' the 'ncc' is used - it ignores/overrides some settings, but they are still used by IDE and vitest
   "compilerOptions": {
-    "target": "ES2022",            // highest fully supported by Node 20
+    "target": "ES2024",            // highest fully supported by Node 24
     "moduleResolution": "bundler", // ignored by ncc. can use 'nodenext', but bundler allows to omit .js in imports
     "module": "ESNext",            // ignored by ncc. only appropriate modern value for "bundler" mode
     // "outDir": "dist"            // ignored by ncc, no matter for IDE. typical value for bundler mode
