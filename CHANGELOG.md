@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.0](https://github.com/agilecustoms/publish-s3/compare/v1.0.2...v2.0.0) (2025-09-21)
+
+### ⚠ BREAKING CHANGES
+
+* upgrade to Node24
+
+### Features
+
+* upgrade to Node24 ([7b1844e](https://github.com/agilecustoms/publish-s3/commit/7b1844e2ccc25da6de379feee52bc95a515ba924))
+
+
 ## [1.0.2](https://github.com/agilecustoms/publish-s3/compare/v1.0.1...v1.0.2) (2025-09-20)
 
 ### Miscellaneous
