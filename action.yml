@@ -1,4 +1,4 @@
-name: Upload S3
+name: Publish S3
 description: 'Upload all files from given directory (default ./s3) to S3'
 author: Alexey Chekulaev
 inputs:
