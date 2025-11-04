@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.3](https://github.com/agilecustoms/publish-s3/compare/v2.0.2...v2.0.3) (2025-11-04)
+
+### Bug Fixes
+
+* adopt integration tests to new vitest which runs tests in parallel by default ([09ada22](https://github.com/agilecustoms/publish-s3/commit/09ada2284b9dcd11ada698c4c0b9f714a2851e4a))
+
+### Miscellaneous
+
+* update deps ([0847849](https://github.com/agilecustoms/publish-s3/commit/084784914c923983a52c78b6e1329b29c977a54a))
+
+
 ## [2.0.2](https://github.com/agilecustoms/publish-s3/compare/v2.0.1...v2.0.2) (2025-09-27)
 
 ### Miscellaneous
