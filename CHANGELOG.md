@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.4](https://github.com/agilecustoms/publish-s3/compare/v2.0.3...v2.0.4) (2025-11-04)
+
+### Miscellaneous
+
+* use upload-artifact@v5 ([4a8f346](https://github.com/agilecustoms/publish-s3/commit/4a8f346f0e4715d50f62d7a84772b626fb8142de))
+
+
 ## [2.0.3](https://github.com/agilecustoms/publish-s3/compare/v2.0.2...v2.0.3) (2025-11-04)
 
 ### Bug Fixes
