@@ -39,3 +39,4 @@ Parameters are not documented: part of them are pass through from `publish` acti
 | `secret-access-key` | **Yes**  | AWS secret access key for authentication                                                                                                             |
 | `session-token`     | **Yes**  | AWS session token for authentication                                                                                                                 |
 | `versions`          | **Yes**  | Space-separated list of versions to upload. Examples: `1.2.4 1.2 1 latest` for semantic versioning, or `2.0-beta` `fix-135` for custom versions      |
+
