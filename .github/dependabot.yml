@@ -4,7 +4,15 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      - dependency-name: "@types/mime-types"
+        update-types:
+          - "version-update:semver-major" # version 3.x has not compatible changes
+      - dependency-name: "mime-types"
+        update-types:
+          - "version-update:semver-major" # version 3.x has not compatible changes
     groups:
       all:
         patterns:
           - "*"
+
