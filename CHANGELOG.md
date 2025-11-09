@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.5](https://github.com/agilecustoms/publish-s3/compare/v2.0.4...v2.0.5) (2025-11-09)
+
+### Miscellaneous
+
+* add release rule build ([0946c73](https://github.com/agilecustoms/publish-s3/commit/0946c737b94e6431b130332ba387704190850f4c))
+
+### Dependencies update
+
+* **deps:** bump the all group with 4 updates ([#29](https://github.com/agilecustoms/publish-s3/issues/29)) ([5161efb](https://github.com/agilecustoms/publish-s3/commit/5161efb6b0f5974fd46ce95a873835f72fe50a73))
+
+
 ## [2.0.4](https://github.com/agilecustoms/publish-s3/compare/v2.0.3...v2.0.4) (2025-11-04)
 
 ### Miscellaneous
