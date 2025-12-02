@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.6](https://github.com/agilecustoms/publish-s3/compare/v2.0.5...v2.0.6) (2025-12-02)
+
+### Dependencies update
+
+* use ubuntu-slim and update deps ([7df2f9e](https://github.com/agilecustoms/publish-s3/commit/7df2f9ea5e96c472a55c20304f8f4bf119e21a4c))
+
+
 ## [2.0.5](https://github.com/agilecustoms/publish-s3/compare/v2.0.4...v2.0.5) (2025-11-09)
 
 ### Miscellaneous
