@@ -45,7 +45,7 @@ jobs:
   Release:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
     needs: Build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-slim
     environment: release
     steps:
       - name: Checkout
