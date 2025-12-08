@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.7](https://github.com/agilecustoms/publish-s3/compare/v2.0.6...v2.0.7) (2025-12-08)
+
+### Dependencies update
+
+* **deps:** bump @aws-sdk/client-s3 in the all group ([#31](https://github.com/agilecustoms/publish-s3/issues/31)) ([258d8ba](https://github.com/agilecustoms/publish-s3/commit/258d8ba876f3d829c118cee2af400d90494339f0))
+
+
 ## [2.0.6](https://github.com/agilecustoms/publish-s3/compare/v2.0.5...v2.0.6) (2025-12-02)
 
 ### Dependencies update
