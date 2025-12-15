@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/agilecustoms/publish-s3/compare/v2.0.7...v2.1.0) (2025-12-15)
+
+### Features
+
+* update deps, including actions-core - which was updated to support Node 24 ([b4f0e38](https://github.com/agilecustoms/publish-s3/commit/b4f0e3860d35eadb9ac57e3f9bf6dda01d03a691))
+
+
 ## [2.0.7](https://github.com/agilecustoms/publish-s3/compare/v2.0.6...v2.0.7) (2025-12-08)
 
 ### Dependencies update
