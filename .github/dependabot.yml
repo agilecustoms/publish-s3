@@ -5,12 +5,15 @@ updates:
     schedule:
       interval: "weekly"
     ignore:
+      - dependency-name: '@types/node'
+        update-types:
+          - "version-update:semver-major" # stay on v24 as it is the latest Node supported by Ubuntu latest
       - dependency-name: "@types/mime-types"
         update-types:
-          - "version-update:semver-major" # version 3.x has not compatible changes
+          - "version-update:semver-major" # version 3.x has non-compatible changes
       - dependency-name: "mime-types"
         update-types:
-          - "version-update:semver-major" # version 3.x has not compatible changes
+          - "version-update:semver-major" # version 3.x has non-compatible changes
     groups:
       all:
         patterns:
