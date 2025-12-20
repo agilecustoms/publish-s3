@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@actions/core": "^2.0.0",
-    "@aws-sdk/client-s3": "^3.927.0",
+    "@aws-sdk/client-s3": "^3.956.0",
     "@types/mime-types": "^2.1.4",
     "mime-types": "^2.1.35"
   },
@@ -44,12 +44,12 @@
     "@testcontainers/localstack": "^11.8.0",
     "@types/node": "^24.0.0",
     "@vercel/ncc": "^0.38.3",
-    "@vitest/coverage-v8": "^4.0.8",
+    "@vitest/coverage-v8": "^4.0.16",
     "eslint": "^9.9.0",
     "eslint-plugin-import": "^2.31.0",
     "husky": "^9.1.7",
     "typescript": "^5.4.5",
-    "typescript-eslint": "^8.2.0",
+    "typescript-eslint": "^8.50.0",
     "vitest": "^4.0.0"
   }
 }
