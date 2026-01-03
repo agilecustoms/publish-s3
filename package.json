@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@actions/core": "^2.0.0",
-    "@aws-sdk/client-s3": "^3.927.0",
+    "@aws-sdk/client-s3": "^3.962.0",
     "@types/mime-types": "^2.1.4",
     "mime-types": "^2.1.35"
   },
