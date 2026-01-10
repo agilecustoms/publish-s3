@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.3](https://github.com/agilecustoms/publish-s3/compare/v2.1.2...v2.1.3) (2026-01-10)
+
+### Dependencies update
+
+* **deps:** bump the all group with 3 updates ([#35](https://github.com/agilecustoms/publish-s3/issues/35)) ([bc4d8f3](https://github.com/agilecustoms/publish-s3/commit/bc4d8f3cc366582a59b93a5f58121c742d5919ca))
+
+
 ## [2.1.2](https://github.com/agilecustoms/publish-s3/compare/v2.1.1...v2.1.2) (2026-01-09)
 
 ### Miscellaneous
