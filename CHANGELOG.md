@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.4](https://github.com/agilecustoms/publish-s3/compare/v2.1.3...v2.1.4) (2026-01-13)
+
+### Miscellaneous
+
+* update deps ([dd3de74](https://github.com/agilecustoms/publish-s3/commit/dd3de742082fe565bf88e00430bf10fb95a26997))
+
+
 ## [2.1.3](https://github.com/agilecustoms/publish-s3/compare/v2.1.2...v2.1.3) (2026-01-10)
 
 ### Dependencies update
