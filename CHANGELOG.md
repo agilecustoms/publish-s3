@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.5](https://github.com/agilecustoms/publish-s3/compare/v2.1.4...v2.1.5) (2026-01-19)
+
+### Miscellaneous
+
+* use new GH actions ([1288bce](https://github.com/agilecustoms/publish-s3/commit/1288bce81b95e70ef8e101bd4ab62457d5109f49))
+
+### Dependencies update
+
+* use stable version of release action ([8dd1b43](https://github.com/agilecustoms/publish-s3/commit/8dd1b43c6523c0f685479961f486428cb0ac87f0))
+
+
 ## [2.1.4](https://github.com/agilecustoms/publish-s3/compare/v2.1.3...v2.1.4) (2026-01-13)
 
 ### Miscellaneous
