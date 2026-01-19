@@ -59,7 +59,7 @@ jobs:
           path: dist
 
       - name: Release
-        uses: agilecustoms/release@next
+        uses: agilecustoms/release@main
         with:
           npm-extra-deps: conventional-changelog-conventionalcommits@9.1.0
         env:
