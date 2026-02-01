@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.8](https://github.com/agilecustoms/publish-s3/compare/v2.1.7...v2.1.8) (2026-02-01)
+
+### Miscellaneous
+
+* get rid of npm-extra-deps ([73722ed](https://github.com/agilecustoms/publish-s3/commit/73722ed2412ebc6bd495f1cd666ad4b8f8bb31ac))
+
+
 ## [2.1.7](https://github.com/agilecustoms/publish-s3/compare/v2.1.6...v2.1.7) (2026-01-31)
 
 ### Miscellaneous
