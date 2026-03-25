@@ -29,6 +29,8 @@ jobs:
 
       - name: Test
         run: npm run test
+        env:
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
 
       # Idea is that if all tests pass, then it deserve to be built
       # It doesn't matter for 'build' workflow, but it does for 'build-and-release' workflow

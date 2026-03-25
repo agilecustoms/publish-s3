@@ -65,7 +65,11 @@ describe('FileUploader', () => {
   }
 
   beforeAll(async () => {
-    container = await new LocalstackContainer('localstack/localstack:latest').start()
+    container = await new LocalstackContainer('localstack/localstack:latest')
+      .withEnvironment({
+        LOCALSTACK_AUTH_TOKEN: process.env.LOCALSTACK_AUTH_TOKEN!,
+      })
+      .start()
     const s3Client = new S3Client({
       ...config(container),
       forcePathStyle: true,
