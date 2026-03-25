@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.1.12](https://github.com/agilecustoms/publish-s3/compare/v2.1.11...v2.1.12) (2026-03-25)
+
+### Bug Fixes
+
+* use LOCALSTACK_AUTH_TOKEN ([8ed3b4a](https://github.com/agilecustoms/publish-s3/commit/8ed3b4aa2239c5ca99de2529ea4b231ac614274b))
+
+### Miscellaneous
+
+* update deps ([a52820d](https://github.com/agilecustoms/publish-s3/commit/a52820d541dbbb618434bc2de86165307e8d627a))
+
+
 ## [2.1.11](https://github.com/agilecustoms/publish-s3/compare/v2.1.10...v2.1.11) (2026-03-17)
 
 ### Miscellaneous
