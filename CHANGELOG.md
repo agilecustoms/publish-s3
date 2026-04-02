@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.13](https://github.com/agilecustoms/publish-s3/compare/v2.1.12...v2.1.13) (2026-04-02)
+
+### Miscellaneous
+
+* update to TypeScript 6 ([0dbe6de](https://github.com/agilecustoms/publish-s3/commit/0dbe6de928b694f7ca23728c1dd816591572c295))
+
+
 ## [2.1.12](https://github.com/agilecustoms/publish-s3/compare/v2.1.11...v2.1.12) (2026-03-25)
 
 ### Bug Fixes
