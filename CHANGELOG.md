@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.15](https://github.com/agilecustoms/publish-s3/compare/v2.1.14...v2.1.15) (2026-05-04)
+
+### Miscellaneous
+
+* update deps, do not use husky for pre-commit hooks ([1bfcca1](https://github.com/agilecustoms/publish-s3/commit/1bfcca182f3e9294bf4cd8783616935a273e80c5))
+
+
 ## [2.1.14](https://github.com/agilecustoms/publish-s3/compare/v2.1.13...v2.1.14) (2026-04-20)
 
 ### Miscellaneous
