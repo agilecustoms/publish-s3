@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.2.0](https://github.com/agilecustoms/publish-s3/compare/v2.1.15...v2.2.0) (2026-05-14)
+
+### Features
+
+* ability to specify aws region ([cf6d3bd](https://github.com/agilecustoms/publish-s3/commit/cf6d3bd36664f75e3695c59b0cff1813accedc31))
+
+### Miscellaneous
+
+* update deps ([ae518ad](https://github.com/agilecustoms/publish-s3/commit/ae518adc89bd5f19fb42f8614d5f5de5e52e0341))
+
+
 ## [2.1.15](https://github.com/agilecustoms/publish-s3/compare/v2.1.14...v2.1.15) (2026-05-04)
 
 ### Miscellaneous
