@@ -5,6 +5,9 @@ inputs:
   access-key-id:
     required: true
     description: AWS access key id
+  aws-region:
+    required: false
+    description: AWS region, by default inferred from env variables or ~/.aws/config
   bucket:
     required: true
     description: s3 bucket name
