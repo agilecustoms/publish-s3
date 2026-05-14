@@ -199,24 +199,12 @@ describe('FileUploader', () => {
 
   it('should fail if source dir does not exist', async () => {
     const ctx = create()
-    try {
-      await upload(ctx, 'non-existing', VERSION)
-    } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      expect(e.message).toContain('ENOENT')
-      return
-    }
-    throw new Error('should never reach here')
+    await expect(upload(ctx, 'non-existing', VERSION)).rejects.toThrow('ENOENT')
   })
 
   it('should fail if source-dir points to a file', async () => {
     const ctx = create()
-    try {
-      await upload(ctx, 'test-file', VERSION)
-    } catch (e: any) { // eslint-disable-line @typescript-eslint/no-explicit-any
-      expect(e.message).toContain('NOTDIR')
-      return
-    }
-    throw new Error('should never reach here')
+    await expect(upload(ctx, 'test-file', VERSION)).rejects.toThrow('NOTDIR')
   })
 
   describe('override', () => {

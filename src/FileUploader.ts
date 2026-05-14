@@ -91,6 +91,9 @@ export class FileUploader {
     })
     const deleteOutput = await this.s3Client.send(deleteObjectsCommand)
     this.assertStatusCode(deleteOutput, `Failed to delete ${bucket}/${bucketDir}`)
+    if (deleteOutput.Errors && deleteOutput.Errors.length > 0) {
+      throw new Error(`Failed to delete some objects: ${JSON.stringify(deleteOutput.Errors)}`)
+    }
   }
 
   private assertStatusCode(output: MetadataBearer, message: string): void {

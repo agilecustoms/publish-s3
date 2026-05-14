@@ -5,12 +5,6 @@ inputs:
   access-key-id:
     required: true
     description: AWS access key id
-  secret-access-key:
-    required: true
-    description: AWS secret access key
-  session-token:
-    required: true
-    description: AWS session token
   bucket:
     required: true
     description: s3 bucket name
@@ -20,10 +14,16 @@ inputs:
   dev-release:
     required: false
     description: 'if true, will upload to "dev" bucket, otherwise to "prod" bucket'
-    default: false
+    default: 'false'
+  secret-access-key:
+    required: true
+    description: AWS secret access key
+  session-token:
+    required: true
+    description: AWS session token
   versions:
     required: true
-    description: ex - 1.2.4,1.2,1,latest; could be 2.0-beta, fix-135
+    description: ex - 1.2.4 1.2 1 latest; could be 2.0-beta, fix-135
 runs:
   using: 'node24'
   main: 'dist/index.js'
