@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/agilecustoms/publish-s3/compare/v2.2.0...v2.2.1) (2026-05-28)
+
+### Miscellaneous
+
+* update deps (including security one) ([1e56d9a](https://github.com/agilecustoms/publish-s3/commit/1e56d9a6a1474d787b9cfb835f4372c8d633fd55))
+
+
 ## [2.2.0](https://github.com/agilecustoms/publish-s3/compare/v2.1.15...v2.2.0) (2026-05-14)
 
 ### Features
