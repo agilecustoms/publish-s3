@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.2](https://github.com/agilecustoms/publish-s3/compare/v2.2.1...v2.2.2) (2026-06-24)
+
+### Miscellaneous
+
+* update deps ([2d06048](https://github.com/agilecustoms/publish-s3/commit/2d060485d04709c993590e117b8fd9eb703c6146))
+
+
 ## [2.2.1](https://github.com/agilecustoms/publish-s3/compare/v2.2.0...v2.2.1) (2026-05-28)
 
 ### Miscellaneous
