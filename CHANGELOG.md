@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.3](https://github.com/agilecustoms/publish-s3/compare/v2.2.2...v2.2.3) (2026-10-09)
+
+### Miscellaneous
+
+* update GitHub actions to latest versions ([2aa2261](https://github.com/agilecustoms/publish-s3/commit/2aa2261ba3248fbc2cc12d79917b27cb14ccad86))
+
+
 ## [2.2.2](https://github.com/agilecustoms/publish-s3/compare/v2.2.1...v2.2.2) (2026-06-24)
 
 ### Miscellaneous
