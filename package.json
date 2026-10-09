@@ -33,21 +33,21 @@
     "build": "ncc build src/index.ts --minify; rm dist/package.json"
   },
   "dependencies": {
-    "@actions/core": "^3.0.0",
-    "@aws-sdk/client-s3": "^3.966.0",
-    "@types/mime-types": "^2.1.4",
-    "mime-types": "^2.1.35"
+    "@actions/core": "^3.0.1",
+    "@aws-sdk/client-s3": "^3.1148.0",
+    "@types/mime-types": "^3.0.1",
+    "mime-types": "^3.0.2"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^5.7.0",
-    "@testcontainers/localstack": "^12.0.0",
-    "@types/node": "^24.10.6",
-    "@vercel/ncc": "^0.38.3",
-    "@vitest/coverage-v8": "^4.0.8",
-    "eslint": "^9.9.0",
-    "eslint-plugin-import": "^2.31.0",
-    "typescript": "^6.0.0",
-    "typescript-eslint": "^8.2.0",
-    "vitest": "^4.0.0"
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@testcontainers/localstack": "^12.2.0",
+    "@types/node": "^24.19.1",
+    "@vercel/ncc": "^0.45.0",
+    "@vitest/coverage-v8": "^5.0.3",
+    "eslint": "^9.39.5",
+    "eslint-plugin-import": "^2.32.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vitest": "^5.0.3"
   }
 }

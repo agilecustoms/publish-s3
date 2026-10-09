@@ -162,11 +162,11 @@ describe('FileUploader', () => {
     await assertObject(ctx, `myservice/latest/test.txt`)
   })
 
-  it('should upload with charset: html, css. All others w/o charset', async () => {
+  it('should upload with charset: html, css, js. All others w/o charset', async () => {
     const ctx = create()
     await upload(ctx, 'test-charset', VERSION)
 
-    await assertCharset(ctx, `myservice/${VERSION}/app.js`, 'application/javascript')
+    await assertCharset(ctx, `myservice/${VERSION}/app.js`, 'text/javascript; charset=utf-8')
     await assertCharset(ctx, `myservice/${VERSION}/desktop.png`, 'image/png')
     await assertCharset(ctx, `myservice/${VERSION}/index.html`, 'text/html; charset=utf-8')
     await assertCharset(ctx, `myservice/${VERSION}/openapi.json`, 'application/json')
