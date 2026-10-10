@@ -1,5 +1,20 @@
-node_modules
-.idea
-
-# system files
+# System files
 .DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Temp files
+.tmp
+
+# Dependencies
+node_modules/
+
+# Build output
+# dist/ is committed: GitHub Action runs dist/index.js
+
+# Test reports
+coverage/
