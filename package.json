@@ -1,6 +1,7 @@
 {
   "name": "publish-s3",
   "version": "2.2.5",
+  "private": true,
   "description": "Publish (upload) files from ./s3 directory to AWS S3",
   "keywords": [
     "aws",
@@ -20,7 +21,6 @@
   },
   "license": "MIT",
   "author": "Alexey Chekulaev <chekulaevalexey@gmail.com> (https://github.com/laxa1986)",
-  "private": true,
   "type": "module",
   "main": "dist/index.js",
   "engines": {
