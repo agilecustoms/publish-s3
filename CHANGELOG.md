@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.5](https://github.com/agilecustoms/publish-s3/compare/v2.2.4...v2.2.5) (2026-10-12)
+
+### Miscellaneous
+
+* unify .gitignore sections [skip ci] ([cc7483f](https://github.com/agilecustoms/publish-s3/commit/cc7483f46abf4b6e6aee8c16bf0b0c4817fc4f83))
+* use make targets in build pipeline ([6ec7144](https://github.com/agilecustoms/publish-s3/commit/6ec71445255aad9ac144470107806df48bab4165))
+
+
 ## [2.2.4](https://github.com/agilecustoms/publish-s3/compare/v2.2.3...v2.2.4) (2026-10-09)
 
 ### Miscellaneous
