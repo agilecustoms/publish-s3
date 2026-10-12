@@ -25,10 +25,10 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint
+        run: make app1-lint
 
       - name: Test
-        run: npm run test
+        run: make app2-test
         env:
           LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
 
@@ -36,7 +36,7 @@ jobs:
       # It doesn't matter for 'build' workflow, but it does for 'build-and-release' workflow
       #  so I don't need to download all dependencies again
       - name: Build
-        run: npm run build
+        run: make app3-build
 
       - name: Upload artifacts
         if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
