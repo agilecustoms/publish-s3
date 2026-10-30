@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.6](https://github.com/agilecustoms/publish-s3/compare/v2.2.5...v2.2.6) (2026-10-30)
+
+### Miscellaneous
+
+* add e2e Test job, runs built action (dist/) against S3 in LocalStack ([1fdbf53](https://github.com/agilecustoms/publish-s3/commit/1fdbf530f5d21eecd92d2834ca36190843fe6e7e))
+* normalize package.json key order [skip ci] ([31b9880](https://github.com/agilecustoms/publish-s3/commit/31b9880a805ef9512c13b659ffd975d060292252))
+
+
 ## [2.2.5](https://github.com/agilecustoms/publish-s3/compare/v2.2.4...v2.2.5) (2026-10-12)
 
 ### Miscellaneous
