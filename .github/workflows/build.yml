@@ -39,14 +39,100 @@ jobs:
         run: make app3-build
 
       - name: Upload artifacts
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
         uses: actions/upload-artifact@v7
         with:
           path: dist # take everything from dist/ folder
 
+  # Runs the built action (dist/ from Build job) the way GitHub does, against S3 in LocalStack
+  Test:
+    needs: Build
+    runs-on: ubuntu-latest # has docker
+    permissions:
+      contents: read # required for actions/checkout
+    env: # used by AWS CLI in verify steps and by AWS SDK in the action (AWS_ENDPOINT_URL)
+      AWS_ENDPOINT_URL: http://s3.localhost.localstack.cloud:4566 # *.localhost.localstack.cloud resolves to 127.0.0.1
+      AWS_REGION: us-east-1
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: artifact # default name in upload-artifact; with explicit name files go straight to dist/
+          path: dist
+
+      - name: Start LocalStack
+        env:
+          LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
+        run: |
+          docker run -d --name localstack -p 4566:4566 -e LOCALSTACK_AUTH_TOKEN localstack/localstack:latest
+          for _ in $(seq 1 60); do
+            curl -s http://localhost:4566/_localstack/health | grep -Eq '"s3": ?"(available|running)"' && exit 0
+            sleep 2
+          done
+          echo "LocalStack did not start"; docker logs localstack; exit 1
+
+      - name: Create bucket
+        run: aws s3 mb s3://test-bucket
+
+
+      - name: Test 1. Setup s3/ directory
+        run: |
+          mkdir -p s3/assets
+          echo "<html></html>" > s3/index.html
+          echo "body {}" > s3/assets/app.css
+
+      - name: Test 1. Should upload s3/ directory for each version
+        uses: ./
+        with:
+          access-key-id: test
+          secret-access-key: test
+          session-token: test
+          bucket: test-bucket
+          bucket-dir: dist
+          versions: 1.2.3 1.2 latest
+
+      - name: Test 1. Verify files uploaded for each version with tag Release=true
+        run: |
+          for v in 1.2.3 1.2 latest; do
+            for f in index.html assets/app.css; do
+              key="dist/publish-s3/$v/$f"
+              tag=$(aws s3api get-object-tagging --bucket test-bucket --key "$key" --query "TagSet[?Key=='Release'].Value" --output text)
+              echo "$key Release=$tag"
+              [ "$tag" = "true" ]
+            done
+          done
+          content_type=$(aws s3api head-object --bucket test-bucket --key dist/publish-s3/latest/index.html --query ContentType --output text)
+          echo "index.html ContentType=$content_type"
+          [[ "$content_type" == text/html* ]]
+
+
+      # 'dev-release' string -> boolean happens only in index.ts (integration tests call FileUploader directly)
+      - name: Test 2. Should upload with tag Release=false for dev-release
+        uses: ./
+        with:
+          access-key-id: test
+          secret-access-key: test
+          session-token: test
+          bucket: test-bucket
+          bucket-dir: dist
+          versions: feature-abc
+          dev-release: true
+
+      - name: Test 2. Verify tag Release=false
+        run: |
+          tag=$(aws s3api get-object-tagging --bucket test-bucket --key dist/publish-s3/feature-abc/index.html --query "TagSet[?Key=='Release'].Value" --output text)
+          echo "feature-abc/index.html Release=$tag"
+          [ "$tag" = "false" ]
+
   Release:
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/next'
-    needs: Build
+    needs: [ Build, Test ]
     runs-on: ubuntu-slim
     environment: release
     steps:
