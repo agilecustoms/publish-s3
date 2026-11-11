@@ -18,8 +18,8 @@ jobs:
       - name: Cache
         uses: actions/cache@v6
         with:
-          path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: ~/.npm
 
       - name: Install dependencies
         run: npm ci
@@ -91,10 +91,10 @@ jobs:
         uses: ./
         with:
           access-key-id: test
-          secret-access-key: test
-          session-token: test
           bucket: test-bucket
           bucket-dir: dist
+          secret-access-key: test
+          session-token: test
           versions: 1.2.3 1.2 latest
 
       - name: Test 1. Verify files uploaded for each version with tag Release=true
@@ -117,12 +117,12 @@ jobs:
         uses: ./
         with:
           access-key-id: test
-          secret-access-key: test
-          session-token: test
           bucket: test-bucket
           bucket-dir: dist
-          versions: feature-abc
           dev-release: true
+          secret-access-key: test
+          session-token: test
+          versions: feature-abc
 
       - name: Test 2. Verify tag Release=false
         run: |
