@@ -18,8 +18,3 @@ app2-test:
 
 app3-build:
 	@npm run build
-
-# ---------------------------------------------------
-
-x-install-git-hooks:
-	@cp .github/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
