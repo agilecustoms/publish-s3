@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.2.7](https://github.com/agilecustoms/publish-s3/compare/v2.2.6...v2.2.7) (2026-11-15)
+
+### Miscellaneous
+
+* update deps, @stylistic/eslint-plugin 5 -> 6 (list-style rule off: several short items per line are fine) ([d3eb5a7](https://github.com/agilecustoms/publish-s3/commit/d3eb5a72413f948e5229203d1599646909fa26c9))
+
+### Dependencies update
+
+* git hooks in .githooks (core.hooksPath), drop x-install-git-hooks [skip ci] ([30fb23d](https://github.com/agilecustoms/publish-s3/commit/30fb23dc664d674c29c979ba04fe252b4daec872))
+* mark Makefile targets not called by CI [skip ci] ([03e8ae5](https://github.com/agilecustoms/publish-s3/commit/03e8ae5165c976c351e2f9b3c13cd71842483f5e))
+* sort action inputs alphabetically [skip ci] ([7b4c61d](https://github.com/agilecustoms/publish-s3/commit/7b4c61d33cd293bcbb28ecf68cedafefb5157212))
+
+
 ## [2.2.6](https://github.com/agilecustoms/publish-s3/compare/v2.2.5...v2.2.6) (2026-10-30)
 
 ### Miscellaneous
