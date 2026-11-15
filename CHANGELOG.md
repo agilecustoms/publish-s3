@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.8](https://github.com/agilecustoms/publish-s3/compare/v2.2.7...v2.2.8) (2026-11-15)
+
+### Miscellaneous
+
+* eslint 9 -> 10, eslint-plugin-import -> eslint-plugin-import-x (eslint-plugin-import doesn't support eslint 10) ([dc9e336](https://github.com/agilecustoms/publish-s3/commit/dc9e336731b27e291dce1454e95ab825403a33da))
+
+
 ## [2.2.7](https://github.com/agilecustoms/publish-s3/compare/v2.2.6...v2.2.7) (2026-11-15)
 
 ### Miscellaneous
