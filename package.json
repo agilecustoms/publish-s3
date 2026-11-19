@@ -28,6 +28,7 @@
   },
   "scripts": {
     "lint": "eslint *.{ts,mjs} \"src/**/*.ts\" \"test/**/*.ts\"",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run --project unit",
     "test-integration": "vitest run --coverage --project integration",
     "build": "ncc build src/index.ts --minify; rm dist/package.json"
