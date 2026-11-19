@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.10](https://github.com/agilecustoms/publish-s3/compare/v2.2.9...v2.2.10) (2026-11-19)
+
+### Dependencies update
+
+* lint runs type check (tsc --noEmit) after eslint ([825ac05](https://github.com/agilecustoms/publish-s3/commit/825ac05b4613bc434940a28bde202c68c9946d0a))
+
+
 ## [2.2.9](https://github.com/agilecustoms/publish-s3/compare/v2.2.8...v2.2.9) (2026-11-19)
 
 ### Dependencies update
