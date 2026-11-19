@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.9](https://github.com/agilecustoms/publish-s3/compare/v2.2.8...v2.2.9) (2026-11-19)
+
+### Dependencies update
+
+* make targets lint, test-app, test-it, build, deps-*; unit tests apart from integration (LocalStack) ([0528304](https://github.com/agilecustoms/publish-s3/commit/052830455cbb20eb0a674e0d28f607fd98ea4f35))
+
+
 ## [2.2.8](https://github.com/agilecustoms/publish-s3/compare/v2.2.7...v2.2.8) (2026-11-15)
 
 ### Miscellaneous
