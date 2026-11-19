@@ -25,10 +25,13 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: make app1-lint
+        run: make lint
 
-      - name: Test
-        run: make app2-test
+      - name: Unit tests
+        run: make test-app
+
+      - name: Integration tests
+        run: make test-it
         env:
           LOCALSTACK_AUTH_TOKEN: ${{ secrets.LOCALSTACK_AUTH_TOKEN }}
 
@@ -36,7 +39,7 @@ jobs:
       # It doesn't matter for 'build' workflow, but it does for 'build-and-release' workflow
       #  so I don't need to download all dependencies again
       - name: Build
-        run: make app3-build
+        run: make build
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v7

@@ -6,8 +6,8 @@ import {
 } from '@aws-sdk/client-s3'
 import { LocalstackContainer, StartedLocalStackContainer } from '@testcontainers/localstack'
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
-import { FileService } from '../src/FileService'
-import { FileUploader } from '../src/FileUploader'
+import { FileService } from '../../src/FileService'
+import { FileUploader } from '../../src/FileUploader'
 
 const REGION = 'us-east-1'
 const BUCKET_NAME = 'testcontainers'
@@ -57,7 +57,7 @@ describe('FileUploader', () => {
 
   async function uploadDir(ctx: Ctx, srcDir: string, bucketDir: string, service: string, versions: string[], devRelease: boolean = false): Promise<void> {
     const rawVersions = versions.join(' ')
-    await fileUploader.upload(`${__dirname}/${srcDir}`, BUCKET_NAME, `${ctx.prefix}/${bucketDir}`, service, rawVersions, devRelease)
+    await fileUploader.upload(`${__dirname}/../fixtures/${srcDir}`, BUCKET_NAME, `${ctx.prefix}/${bucketDir}`, service, rawVersions, devRelease)
   }
 
   async function upload(ctx: Ctx, srcDir: string, ...versions: string[]): Promise<void> {

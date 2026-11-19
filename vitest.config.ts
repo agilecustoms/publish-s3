@@ -9,10 +9,27 @@ export default defineConfig({
         ...coverageConfigDefaults.exclude
       ],
       reporter: ['text'], // other: 'html', 'clover', 'json'
+      // measured on integration tests (npm run test-integration): unit tests cover only FileService
       thresholds: {
         lines: 90,
         branches: 80,
       }
-    }
+    },
+    projects: [
+      {
+        extends: true,
+        test: {
+          name: 'unit',
+          include: ['test/unit/**/*.test.ts'],
+        }
+      },
+      {
+        extends: true,
+        test: {
+          name: 'integration',
+          include: ['test/integration/**/*.test.ts'],
+        }
+      }
+    ]
   }
 })

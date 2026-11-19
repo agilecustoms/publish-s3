@@ -1,20 +1,20 @@
-.PHONY: test
-
 # npm list --all - show dependency tree
-app0-install-deps:
+deps-install:
 	@npm install
 
-app0-update-deps:
+deps-update:
 	@npm update; npm install; npm outdated; npm find-dupes --ignore-scripts
 
-app1-lint:
+# fix: npm run lint -- --fix
+lint:
 	@npm run lint
 
-app1-lint-fix: # not called by CI (local only: fixes lint errors in place)
-	@npm run lint:fix
-
-app2-test:
+test-app:
 	@npm run test
 
-app3-build:
+# LocalStack via testcontainers (Docker), coverage is measured here
+test-it:
+	@npm run test-integration
+
+build:
 	@npm run build
