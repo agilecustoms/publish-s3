@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.11](https://github.com/agilecustoms/publish-s3/compare/v2.2.10...v2.2.11) (2026-11-19)
+
+### Dependencies update
+
+* .releaserc.json same as gha-release: build: releases a patch, 'Dependencies update' section ([46eb23f](https://github.com/agilecustoms/publish-s3/commit/46eb23f69be0edd68e19ffa5ac3d0891bf202e01))
+
+
 ## [2.2.10](https://github.com/agilecustoms/publish-s3/compare/v2.2.9...v2.2.10) (2026-11-19)
 
 ### Dependencies update

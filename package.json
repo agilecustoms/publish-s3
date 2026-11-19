@@ -1,6 +1,6 @@
 {
   "name": "publish-s3",
-  "version": "2.2.10",
+  "version": "2.2.11",
   "private": true,
   "description": "Publish (upload) files from ./s3 directory to AWS S3",
   "keywords": [
