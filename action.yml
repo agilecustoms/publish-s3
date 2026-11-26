@@ -16,7 +16,7 @@ inputs:
     description: s3 bucket directory to place - 'bucket/bucket-dir/repo-name/version', empty by default
   dev-release:
     required: false
-    description: 'if true, will upload to "dev" bucket, otherwise to "prod" bucket'
+    description: 'if true, objects get tag Release=false (dev release), otherwise Release=true'
     default: 'false'
   secret-access-key:
     required: true
