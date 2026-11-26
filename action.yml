@@ -3,30 +3,30 @@ description: 'Upload all files from given directory (default ./s3) to S3'
 author: Alexey Chekulaev
 inputs:
   access-key-id:
-    required: true
     description: AWS access key id
-  aws-region:
-    required: false
-    description: AWS region, by default inferred from env variables or ~/.aws/config
-  bucket:
     required: true
+  aws-region:
+    description: AWS region, by default inferred from env variables or ~/.aws/config
+    required: false
+  bucket:
     description: s3 bucket name
+    required: true
   bucket-dir:
-    required: false
     description: s3 bucket directory to place - 'bucket/bucket-dir/repo-name/version', empty by default
-  dev-release:
     required: false
+  dev-release:
     description: 'if true, objects get tag Release=false (dev release), otherwise Release=true'
+    required: false
     default: 'false'
   secret-access-key:
-    required: true
     description: AWS secret access key
+    required: true
   session-token:
-    required: true
     description: AWS session token
-  versions:
     required: true
+  versions:
     description: ex - 1.2.4 1.2 1 latest; could be 2.0-beta, fix-135
+    required: true
 runs:
   using: 'node24'
   main: 'dist/index.js'
