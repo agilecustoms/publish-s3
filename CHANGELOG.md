@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.12](https://github.com/agilecustoms/publish-s3/compare/v2.2.11...v2.2.12) (2026-11-26)
+
+### Documentation
+
+* README follows repo-standards rule 002, fix dev-release input description ([7034c7a](https://github.com/agilecustoms/publish-s3/commit/7034c7a0caa63af125f6a72aac634765fae92d61))
+
+
 ## [2.2.11](https://github.com/agilecustoms/publish-s3/compare/v2.2.10...v2.2.11) (2026-11-19)
 
 ### Dependencies update
