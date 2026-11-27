@@ -15,7 +15,8 @@ export class FileUploader {
     private readonly s3Client: S3Client
   ) {}
 
-  public async upload(srcDir: string, bucket: string, bucketDir: string, service: string, rawVersions: string, devRelease: boolean): Promise<void> {
+  public async upload(srcDir: string, bucket: string, bucketDir: string, service: string, rawVersions: string,
+    devRelease: boolean): Promise<void> {
     const versions = rawVersions.trim().split(' ').map(v => v.trim())
     if (bucketDir && !bucketDir.endsWith('/')) {
       bucketDir += '/'

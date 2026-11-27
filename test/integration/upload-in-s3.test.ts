@@ -55,7 +55,8 @@ describe('FileUploader', () => {
     expect(output.ContentType).toEqual(expected)
   }
 
-  async function uploadDir(ctx: Ctx, srcDir: string, bucketDir: string, service: string, versions: string[], devRelease: boolean = false): Promise<void> {
+  async function uploadDir(ctx: Ctx, srcDir: string, bucketDir: string, service: string, versions: string[],
+    devRelease = false): Promise<void> {
     const rawVersions = versions.join(' ')
     await fileUploader.upload(`${__dirname}/../fixtures/${srcDir}`, BUCKET_NAME, `${ctx.prefix}/${bucketDir}`, service, rawVersions, devRelease)
   }
