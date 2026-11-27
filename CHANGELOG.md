@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.13](https://github.com/agilecustoms/publish-s3/compare/v2.2.12...v2.2.13) (2026-11-27)
+
+### Dependencies update
+
+* ESLint max-len 120 ([f60244e](https://github.com/agilecustoms/publish-s3/commit/f60244e7ce98e99d478adbf873e3d6e9cefb3c6f))
+* ESLint preserve-caught-error, rethrown error keeps the caught one as cause ([5a6356e](https://github.com/agilecustoms/publish-s3/commit/5a6356e3e28ee4b8db06c493affdeb0d552e7f4d))
+
+### Miscellaneous
+
+* action inputs keys in order description, required, default [skip ci] ([9c13c33](https://github.com/agilecustoms/publish-s3/commit/9c13c33e219706ff8cd123a4abc5d48727d6685a))
+
+
 ## [2.2.12](https://github.com/agilecustoms/publish-s3/compare/v2.2.11...v2.2.12) (2026-11-26)
 
 ### Documentation
